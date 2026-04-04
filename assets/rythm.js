@@ -470,11 +470,11 @@ var imageShadow = (function (elem, value) {
   var max = !isNaN(options.max) ? options.max : 15;
   var min = !isNaN(options.min) ? options.min : 0.75;
   var scale = (max - min) * value;
-  elem.style['filter'] = `drop-shadow(0 0 ${scale}px #ffb9ff)`; // Adjust hue-rotate to match pink
+  elem.style['filter'] = `drop-shadow(0 0 ${scale}px #ffffff)`; // penis
 });
 
 var reset$17 = function reset(elem) {
-  elem.style['filter'] = 'drop-shadow(0 0 10px #ffb9ff)'; // Adjust hue-rotate to match pink
+  elem.style['filter'] = 'drop-shadow(0 0 10px #ffffff)'; // uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
 };
 
 var Dancer = function () {
