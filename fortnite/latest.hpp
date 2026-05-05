@@ -1,0 +1,87 @@
+{
+  "offsets": {
+    "UWorld": "0x1995B6F0",
+    "UWorldXorKey": "0xCF76574CULL",
+
+    "LocalPlayers": "0x38",
+    "PlayerController": "0x30",
+    "PlayerCameraManager": "0x368",
+    "AcknowledgedPawn": "0x358",
+    "PlayerState": "0x2d0",
+    "TeamIndex": "0x1211",
+    "InitialSquadSize": "0x19f8",
+    "bIsDying": "0x728",
+    "bIsDBNO": "0x841",
+    "bIsABot": "0x2ba",
+
+    "Platform": "0x440",
+    "TargetedFortPawn": "0x1840",
+    "KillScore": "0x1228",
+    "RebootCount": "0x1894",
+    "PlayerName": "0xa08",
+    "PlayerNamePrivate": "0x348",
+    "RankedProgress": "0xd8",
+
+    "OwningGameInstance": "0x240",
+    "GameState": "0x1c8",
+    "PlayerArray": "0x2c8",
+
+    "PersistentLevel": "0x38",
+    "Levels": "0x1e0",
+    "SeasonLevelUIDisplay": "0x122c",
+
+    "AActor": "0x148",
+    "RootComponent": "0x1B0",
+    "PawnPrivate": "0x328",
+
+    "Mesh": "0x330",
+    "BoneArray": "0x628",
+    "BoneCache": "0x638",
+
+    "ComponentToWorld": "0x1e0",
+    "RelativeLocation": "0x140",
+    "RelativeRotation": "0x158",
+    "ComponentVelocity": "0x188",
+    "OverlappingBuildings": "0x1df8",
+    "LastRenderTime": "0x330",
+
+    "CameraLocation": "0x178",
+    "CameraRotation": "0x188",
+    "CameraFOV": "0x3B4",
+
+    "CurrentVehicle": "0x2d20",
+
+    "CurrentWeapon": "0x990",
+    "WeaponData": "0x628",
+    "WeaponOffsetCorrection": "0x26e0",
+    "AdditionalAimOffset": "0x2690",
+    "AmmoCount": "0x116c",
+
+    "ProjectileSpeed": "0x238C",
+    "ProjectileGravity": "0x23C0",
+
+    "HabaneroComponent": "0x948",
+
+    "Spectators": "0xAB0",
+    "SpectatorArray": "0x108",
+
+    "TargetSourceOffset": "0x10e0",
+    "TargetSourceOffsetWhileTargeting": "0x1110",
+    "TargetSourceOffsetWhileCrouched": "0x10f8",
+    "bTraceThroughWorld": "0x10c1",
+
+    "Tier": "0xaa",
+    "ItemName": "0x38"
+  }
+}
+
+static inline uintptr_t DecryptUworld(uint64_t v)
+{
+    return static_cast<std::uintptr_t>(_byteswap_uint64(v) + 3967734672ULL);
+}
+
+//example usage
+uintptr_t EncryptedUWorld = Driver->read<uintptr_t>(Driver->BaseAddress + offsets::UWorld);
+uintptr_t DecryptedUWorld = DecryptUWorld(EncryptedUWorld);
+
+uintptr_t UWorld = DecryptedUWorld;
