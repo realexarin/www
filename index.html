@@ -29,6 +29,7 @@
 
 <div class="desktop">
 
+<!-- ICONS -->
 <div class="icon" id="mycomputer" style="top:40px;left:30px;">
 <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
 <span>My Computer</span>
@@ -44,43 +45,58 @@
 <span>666.sys</span>
 </div>
 
+<div class="icon" id="info" style="top:310px;left:30px;">
+<img src="https://win98icons.alexmeub.com/icons/png/msg_information-0.png">
+<span></span>
+</div>
+
 <!-- WINDOW -->
 <div class="window hidden" id="window">
 
 <div class="titlebar">
 <div class="title">My Computer</div>
-
 <div class="controls">
 <div class="btn">_</div>
 <div class="btn">□</div>
 <div class="btn close" id="close"></div>
 </div>
-
 </div>
 
 <div class="content">
-
 <div class="folder">Documents</div>
 <div class="folder">Disk (C:)</div>
 <div class="folder">Internet</div>
-
-<div class="folder danger" id="file666">666.sys</div>
+<div class="folder danger">666.sys</div>
+</div>
 
 </div>
+
+<!-- CREDITS -->
+<div class="window hidden" id="credits">
+
+<div class="titlebar">
+<div class="title">Information</div>
+<div class="controls">
+<div class="btn">_</div>
+<div class="btn">□</div>
+<div class="btn close" id="closeCredits"></div>
+</div>
+</div>
+
+<div class="content">
+<p>System build: UNKNOWN</p>
+<p>Origin: corrupted sector</p>
+<p>Status: unstable</p>
+</div>
+
 </div>
 
 </div>
 
 <!-- TASKBAR -->
 <div class="taskbar">
-
-<div class="start">
-<img src="https://win98icons.alexmeub.com/icons/png/windows-0.png">
-Start
-</div>
-
+<div class="start">Start</div>
 <div class="clock" id="clock">03:33 AM</div>
-
 </div>
 
 <script>
@@ -89,29 +105,84 @@ const corruptMusic = document.getElementById("corruptMusic");
 const errorSound = document.getElementById("errorSound");
 
 const win = document.getElementById("window");
+const credits = document.getElementById("credits");
+
 const close = document.getElementById("close");
+const closeCredits = document.getElementById("closeCredits");
 
-const mycomputer = document.getElementById("mycomputer");
-const file666 = document.getElementById("file666");
+const info = document.getElementById("info");
+
 const sys666 = document.getElementById("sys666");
-
 const clock = document.getElementById("clock");
 
 let corrupted = false;
+let loopStarted = false;
 
 window.addEventListener("click", () => {
 music.play();
 }, { once:true });
 
-mycomputer.onclick = () => {
+document.getElementById("mycomputer").onclick = () => {
 win.classList.remove("hidden");
 };
 
-close.onclick = () => {
-win.classList.add("hidden");
+close.onclick = () => win.classList.add("hidden");
+
+info.onclick = () => {
+credits.classList.remove("hidden");
 };
 
-function triggerCorruption(){
+closeCredits.onclick = () => {
+credits.classList.add("hidden");
+};
+
+function xpPopup(text){
+
+const box = document.createElement("div");
+box.className = "xpbox";
+
+box.innerHTML = `
+<div class="xp-title">
+<span>System Message</span>
+<button class="xp-x">X</button>
+</div>
+<div class="xp-body">
+<img src="https://win98icons.alexmeub.com/icons/png/msg_warning-0.png">
+<p>${text}</p>
+</div>
+`;
+
+document.body.appendChild(box);
+
+box.querySelector(".xp-x").onclick = () => box.remove();
+
+setTimeout(() => box.remove(), 6000);
+}
+
+function corruptionLoop(){
+
+if(!corrupted) return;
+
+setTimeout(() => {
+
+xpPopup([
+"HE IS WATCHING",
+"PROCESS FAILED",
+"YOU SHOULDN'T HAVE OPENED IT",
+"666 ACTIVE",
+"SYSTEM BREACH",
+"NO ESCAPE"
+][Math.floor(Math.random()*6)]);
+
+errorSound.currentTime = 0;
+errorSound.play();
+
+corruptionLoop();
+
+}, 400 + Math.random()*1200);
+}
+
+function trigger(){
 
 if(corrupted) return;
 corrupted = true;
@@ -121,41 +192,17 @@ corruptMusic.play();
 
 clock.innerText = "06:66 AM";
 
-for(let i=0;i<18;i++){
-
+for(let i=0;i<12;i++){
 setTimeout(() => {
-
-const p = document.createElement("div");
-
-p.className = "popup";
-
-p.style.left = Math.random()*window.innerWidth + "px";
-p.style.top = Math.random()*window.innerHeight + "px";
-
-p.innerText = [
-"HE IS WATCHING",
-"YOU SHOULDN'T HAVE OPENED THIS",
-"NO ESCAPE",
-"THEY ARE INSIDE",
-"WAKE UP",
-"SYSTEM FAILURE",
-"666.SYS ACTIVE",
-"DO NOT LOOK AWAY"
-][Math.floor(Math.random()*8)];
-
-document.body.appendChild(p);
-
 errorSound.currentTime = 0;
 errorSound.play();
-
-}, i*180);
-
+}, i*200);
 }
 
+corruptionLoop();
 }
 
-file666.onclick = triggerCorruption;
-sys666.onclick = triggerCorruption;
+sys666.onclick = trigger;
 
 </script>
 
