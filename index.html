@@ -83,11 +83,6 @@ Start
 
 </div>
 
-<!-- RSOD -->
-<div id="rsod" class="rsod hidden">
-  <img src="assets/rsod.jpg">
-</div>
-
 <script>
 const music = document.getElementById("bgmusic");
 const corruptMusic = document.getElementById("corruptMusic");
@@ -101,7 +96,6 @@ const file666 = document.getElementById("file666");
 const sys666 = document.getElementById("sys666");
 
 const clock = document.getElementById("clock");
-const rsod = document.getElementById("rsod");
 
 let corrupted = false;
 
@@ -138,7 +132,16 @@ p.className = "popup";
 p.style.left = Math.random()*window.innerWidth + "px";
 p.style.top = Math.random()*window.innerHeight + "px";
 
-p.innerText = "SYSTEM ERROR: ENTITY DETECTED";
+p.innerText = [
+"HE IS WATCHING",
+"YOU SHOULDN'T HAVE OPENED THIS",
+"NO ESCAPE",
+"THEY ARE INSIDE",
+"WAKE UP",
+"SYSTEM FAILURE",
+"666.SYS ACTIVE",
+"DO NOT LOOK AWAY"
+][Math.floor(Math.random()*8)];
 
 document.body.appendChild(p);
 
@@ -148,10 +151,6 @@ errorSound.play();
 }, i*180);
 
 }
-
-setTimeout(() => {
-rsod.classList.remove("hidden");
-}, 2600);
 
 }
 
