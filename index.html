@@ -50,45 +50,45 @@
 <span></span>
 </div>
 
-<!-- WINDOW -->
-<div class="window hidden" id="window">
+<div class="icon" id="socials" style="top:400px;left:30px;">
+<img src="https://win98icons.alexmeub.com/icons/png/world-0.png">
+<span></span>
+</div>
 
+<!-- MAIN WINDOW -->
+<div class="window hidden" id="window">
 <div class="titlebar">
 <div class="title">My Computer</div>
-<div class="controls">
-<div class="btn">_</div>
-<div class="btn">□</div>
-<div class="btn close" id="close"></div>
+<div class="controls"><div class="btn close" id="close"></div></div>
 </div>
-</div>
-
 <div class="content">
 <div class="folder">Documents</div>
 <div class="folder">Disk (C:)</div>
 <div class="folder">Internet</div>
 <div class="folder danger">666.sys</div>
 </div>
-
 </div>
 
-<!-- CREDITS -->
-<div class="window hidden" id="credits">
-
+<!-- INFO WINDOW -->
+<div class="window hidden" id="infoWin">
 <div class="titlebar">
-<div class="title">Information</div>
-<div class="controls">
-<div class="btn">_</div>
-<div class="btn">□</div>
-<div class="btn close" id="closeCredits"></div>
+<div class="title">System Info</div>
+<div class="controls"><div class="btn close" id="closeInfo"></div></div>
 </div>
-</div>
-
 <div class="content">
-<p>System build: UNKNOWN</p>
-<p>Origin: corrupted sector</p>
-<p>Status: unstable</p>
+<p>invalid entity found: exarin | at 0x0FF419RE18</p>
+</div>
 </div>
 
+<!-- SOCIALS WINDOW -->
+<div class="window hidden" id="socialWin">
+<div class="titlebar">
+<div class="title">Socials</div>
+<div class="controls"><div class="btn close" id="closeSocial"></div></div>
+</div>
+<div class="content">
+<p>Discord: fogmail.cc</p>
+</div>
 </div>
 
 </div>
@@ -104,47 +104,33 @@ const music = document.getElementById("bgmusic");
 const corruptMusic = document.getElementById("corruptMusic");
 const errorSound = document.getElementById("errorSound");
 
-const win = document.getElementById("window");
-const credits = document.getElementById("credits");
-
-const close = document.getElementById("close");
-const closeCredits = document.getElementById("closeCredits");
-
-const info = document.getElementById("info");
-
 const sys666 = document.getElementById("sys666");
 const clock = document.getElementById("clock");
 
+const info = document.getElementById("info");
+const socials = document.getElementById("socials");
+
+const infoWin = document.getElementById("infoWin");
+const socialWin = document.getElementById("socialWin");
+
 let corrupted = false;
-let loopStarted = false;
 
 window.addEventListener("click", () => {
 music.play();
 }, { once:true });
-
-document.getElementById("mycomputer").onclick = () => {
-win.classList.remove("hidden");
-};
-
-close.onclick = () => win.classList.add("hidden");
-
-info.onclick = () => {
-credits.classList.remove("hidden");
-};
-
-closeCredits.onclick = () => {
-credits.classList.add("hidden");
-};
 
 function xpPopup(text){
 
 const box = document.createElement("div");
 box.className = "xpbox";
 
+box.style.left = Math.random()*window.innerWidth + "px";
+box.style.top = Math.random()*window.innerHeight + "px";
+
 box.innerHTML = `
 <div class="xp-title">
-<span>System Message</span>
-<button class="xp-x">X</button>
+<span>System Error</span>
+<button onclick="this.parentElement.parentElement.remove()">X</button>
 </div>
 <div class="xp-body">
 <img src="https://win98icons.alexmeub.com/icons/png/msg_warning-0.png">
@@ -154,16 +140,12 @@ box.innerHTML = `
 
 document.body.appendChild(box);
 
-box.querySelector(".xp-x").onclick = () => box.remove();
-
 setTimeout(() => box.remove(), 6000);
 }
 
-function corruptionLoop(){
+function loopErrors(){
 
 if(!corrupted) return;
-
-setTimeout(() => {
 
 xpPopup([
 "I AM WATCHING",
@@ -180,17 +162,15 @@ xpPopup([
 "DO YOU HAVE GUTS??",
 "I SEE YOU",
 "NO ESCAPE"
-][Math.floor(Math.random()*6)]);
+][Math.floor(Math.random()*14)]);
 
 errorSound.currentTime = 0;
 errorSound.play();
 
-corruptionLoop();
-
-}, 400 + Math.random()*1200);
+setTimeout(loopErrors, 400 + Math.random()*1200);
 }
 
-function trigger(){
+function trigger666(){
 
 if(corrupted) return;
 corrupted = true;
@@ -207,10 +187,16 @@ errorSound.play();
 }, i*200);
 }
 
-corruptionLoop();
+loopErrors();
 }
 
-sys666.onclick = trigger;
+sys666.onclick = trigger666;
+
+info.onclick = () => infoWin.classList.remove("hidden");
+socials.onclick = () => socialWin.classList.remove("hidden");
+
+document.getElementById("closeInfo").onclick = () => infoWin.classList.add("hidden");
+document.getElementById("closeSocial").onclick = () => socialWin.classList.add("hidden");
 
 </script>
 
