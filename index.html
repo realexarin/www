@@ -1,24 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MY COMPUTER</title>
+
+  <link rel="icon" type="image/png" href="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<audio autoplay loop>
+<audio id="bgmusic" loop preload="auto">
   <source src="assets/song.mp3" type="audio/mpeg">
 </audio>
 
 <div class="scanlines"></div>
+<div class="flicker"></div>
 <div class="noise"></div>
 
-<!-- Desktop -->
 <div class="desktop">
 
-  <!-- Icons -->
   <div class="icon" style="top:40px; left:30px;">
     <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
     <span>My Computer</span>
@@ -34,12 +36,14 @@
     <span>DO_NOT_OPEN</span>
   </div>
 
-  <!-- Main Window -->
   <div class="window">
     <div class="title-bar">
       <span>system_log.txt</span>
-      <div class="buttons">
-        <button>X</button>
+
+      <div class="title-buttons">
+        <div></div>
+        <div></div>
+        <div class="close"></div>
       </div>
     </div>
 
@@ -65,40 +69,55 @@
     </div>
   </div>
 
-  <!-- Popup -->
   <div class="popup">
     <div class="title-bar error">
       <span>Explorer.exe</span>
-      <div class="buttons">
-        <button>X</button>
+
+      <div class="title-buttons">
+        <div></div>
+        <div></div>
+        <div class="close"></div>
       </div>
     </div>
 
     <div class="window-content">
       <p>memory could not be read</p>
+
       <button class="ok">OK</button>
     </div>
   </div>
 
 </div>
 
-<!-- Taskbar -->
 <div class="taskbar">
-  <div class="start-button">Start</div>
+  <div class="start-button">
+    <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png">
+    Start
+  </div>
 
-  <div class="taskbar-text">
-    3:72 AM
+  <div class="tray">
+    06:66 AM
   </div>
 </div>
 
 <script>
-document.body.addEventListener("click", () => {
-  document.querySelector("audio").play();
-});
+const music = document.getElementById("bgmusic");
+
+music.volume = 0.45;
+
+const startMusic = async () => {
+  try {
+    await music.play();
+  } catch (e) {}
+};
+
+window.addEventListener("load", startMusic);
+
+document.addEventListener("click", startMusic);
 
 setInterval(() => {
-  document.querySelector(".popup").classList.toggle("hide");
-}, 9000);
+  document.querySelector(".popup").classList.toggle("hidden");
+}, 11000);
 
 setInterval(() => {
   document.querySelector(".glitch-icon").classList.toggle("shake");
