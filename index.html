@@ -29,7 +29,6 @@
 
 <div class="desktop">
 
-<!-- ICONS -->
 <div class="icon" id="mycomputer" style="top:40px;left:30px;">
 <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
 <span>My Computer</span>
@@ -45,31 +44,18 @@
 <span>666.sys</span>
 </div>
 
+<!-- OLD DISCORD ICON -->
+<div class="icon" id="socials" style="top:400px;left:30px;">
+<img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
+<span></span>
+</div>
+
 <div class="icon" id="info" style="top:310px;left:30px;">
 <img src="https://win98icons.alexmeub.com/icons/png/msg_information-0.png">
 <span></span>
 </div>
 
-<div class="icon" id="socials" style="top:400px;left:30px;">
-<img src="https://win98icons.alexmeub.com/icons/png/world-0.png">
-<span></span>
-</div>
-
-<!-- MAIN WINDOW -->
-<div class="window hidden" id="window">
-<div class="titlebar">
-<div class="title">My Computer</div>
-<div class="controls"><div class="btn close" id="close"></div></div>
-</div>
-<div class="content">
-<div class="folder">Documents</div>
-<div class="folder">Disk (C:)</div>
-<div class="folder">Internet</div>
-<div class="folder danger">666.sys</div>
-</div>
-</div>
-
-<!-- INFO WINDOW -->
+<!-- WINDOWS -->
 <div class="window hidden" id="infoWin">
 <div class="titlebar">
 <div class="title">System Info</div>
@@ -80,7 +66,6 @@
 </div>
 </div>
 
-<!-- SOCIALS WINDOW -->
 <div class="window hidden" id="socialWin">
 <div class="titlebar">
 <div class="title">Socials</div>
@@ -132,6 +117,7 @@ box.innerHTML = `
 <span>System Error</span>
 <button onclick="this.parentElement.parentElement.remove()">X</button>
 </div>
+
 <div class="xp-body">
 <img src="https://win98icons.alexmeub.com/icons/png/msg_warning-0.png">
 <p>${text}</p>
@@ -139,8 +125,6 @@ box.innerHTML = `
 `;
 
 document.body.appendChild(box);
-
-setTimeout(() => box.remove(), 6000);
 }
 
 function loopErrors(){
@@ -167,7 +151,7 @@ xpPopup([
 errorSound.currentTime = 0;
 errorSound.play();
 
-setTimeout(loopErrors, 400 + Math.random()*1200);
+setTimeout(loopErrors, 350 + Math.random()*900);
 }
 
 function trigger666(){
@@ -180,11 +164,11 @@ corruptMusic.play();
 
 clock.innerText = "06:66 AM";
 
-for(let i=0;i<12;i++){
+for(let i=0;i<20;i++){
 setTimeout(() => {
 errorSound.currentTime = 0;
 errorSound.play();
-}, i*200);
+}, i*150);
 }
 
 loopErrors();
@@ -192,10 +176,12 @@ loopErrors();
 
 sys666.onclick = trigger666;
 
+/* INFO */
 info.onclick = () => infoWin.classList.remove("hidden");
-socials.onclick = () => socialWin.classList.remove("hidden");
-
 document.getElementById("closeInfo").onclick = () => infoWin.classList.add("hidden");
+
+/* SOCIALS */
+socials.onclick = () => socialWin.classList.remove("hidden");
 document.getElementById("closeSocial").onclick = () => socialWin.classList.add("hidden");
 
 </script>
