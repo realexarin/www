@@ -8,12 +8,12 @@ background:black;
 .desktop{
 width:100vw;
 height:100vh;
-position:relative;
 background:
 linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.65)),
 url("https://upload.wikimedia.org/wikipedia/commons/6/66/Foggy_forest.jpg");
 background-size:cover;
 background-position:center;
+position:relative;
 }
 
 .icon{
@@ -26,23 +26,19 @@ cursor:pointer;
 text-shadow:1px 1px 2px black;
 }
 
-.icon img{
-width:40px;
-}
-
-.icon span{
-display:block;
-}
+.icon img{width:40px;}
+.icon span{display:block;}
 
 #mycomputer{top:40px;left:30px;}
 #recycle{top:130px;left:30px;}
 #sys666{top:220px;left:30px;}
+#info{top:310px;left:30px;}
 
 .window{
 position:absolute;
-top:80px;
+top:90px;
 left:200px;
-width:500px;
+width:520px;
 background:#d4d0c8;
 border:2px solid #fff;
 box-shadow:inset -2px -2px #888;
@@ -68,14 +64,13 @@ gap:3px;
 width:18px;
 height:16px;
 background:#d4d0c8;
+border:1px solid white;
 text-align:center;
 font-size:10px;
 cursor:pointer;
 }
 
-.close{
-background:red;
-}
+.close{background:red;}
 
 .content{
 padding:10px;
@@ -89,14 +84,6 @@ width:80px;
 text-align:center;
 font-size:11px;
 cursor:pointer;
-}
-
-.folder img{
-width:32px;
-}
-
-.danger{
-color:red;
 }
 
 .taskbar{
@@ -115,10 +102,6 @@ color:white;
 .start{
 background:green;
 padding:4px 10px;
-border-radius:3px;
-display:flex;
-align-items:center;
-gap:5px;
 }
 
 .clock{
@@ -129,9 +112,9 @@ padding:3px 10px;
 .scanlines,
 .noise,
 .vignette{
-pointer-events:none;
 position:fixed;
 inset:0;
+pointer-events:none;
 }
 
 .scanlines{
@@ -147,11 +130,35 @@ opacity:0.04;
 background:radial-gradient(circle,transparent 40%,black);
 }
 
-.popup{
+/* XP STYLE POPUP */
+.xpbox{
 position:absolute;
-background:#111;
-color:red;
-padding:10px;
-border:1px solid red;
+width:280px;
+background:#ece9d8;
+border:2px solid #0a246a;
+box-shadow:2px 2px 0 black;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+}
+
+.xp-title{
+background:#0a246a;
+color:white;
+padding:3px;
+display:flex;
+justify-content:space-between;
 font-size:12px;
+}
+
+.xp-body{
+display:flex;
+gap:10px;
+padding:10px;
+align-items:center;
+font-size:12px;
+}
+
+.xp-body img{
+width:32px;
 }
