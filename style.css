@@ -9,7 +9,7 @@ background:black;
 width:100vw;
 height:100vh;
 background:
-linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.65)),
+linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.7)),
 url("https://upload.wikimedia.org/wikipedia/commons/6/66/Foggy_forest.jpg");
 background-size:cover;
 background-position:center;
@@ -33,58 +33,7 @@ text-shadow:1px 1px 2px black;
 #recycle{top:130px;left:30px;}
 #sys666{top:220px;left:30px;}
 #info{top:310px;left:30px;}
-
-.window{
-position:absolute;
-top:90px;
-left:200px;
-width:520px;
-background:#d4d0c8;
-border:2px solid #fff;
-box-shadow:inset -2px -2px #888;
-}
-
-.hidden{display:none;}
-
-.titlebar{
-background:linear-gradient(to right,#0a246a,#3a6ea5);
-color:white;
-display:flex;
-justify-content:space-between;
-padding:3px;
-font-size:12px;
-}
-
-.controls{
-display:flex;
-gap:3px;
-}
-
-.btn{
-width:18px;
-height:16px;
-background:#d4d0c8;
-border:1px solid white;
-text-align:center;
-font-size:10px;
-cursor:pointer;
-}
-
-.close{background:red;}
-
-.content{
-padding:10px;
-display:flex;
-gap:20px;
-flex-wrap:wrap;
-}
-
-.folder{
-width:80px;
-text-align:center;
-font-size:11px;
-cursor:pointer;
-}
+#socials{top:400px;left:30px;}
 
 .taskbar{
 position:fixed;
@@ -109,37 +58,14 @@ background:rgba(255,255,255,0.2);
 padding:3px 10px;
 }
 
-.scanlines,
-.noise,
-.vignette{
-position:fixed;
-inset:0;
-pointer-events:none;
-}
-
-.scanlines{
-background:repeating-linear-gradient(to bottom,transparent,transparent 2px,rgba(255,255,255,0.03) 3px);
-}
-
-.noise{
-background:url("https://media.tenor.com/AYOaX8sQ3X8AAAAC/static.gif");
-opacity:0.04;
-}
-
-.vignette{
-background:radial-gradient(circle,transparent 40%,black);
-}
-
-/* XP STYLE POPUP */
+/* XP POPUP */
 .xpbox{
 position:absolute;
 width:280px;
 background:#ece9d8;
 border:2px solid #0a246a;
 box-shadow:2px 2px 0 black;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
+z-index:9999;
 }
 
 .xp-title{
@@ -159,6 +85,60 @@ align-items:center;
 font-size:12px;
 }
 
-.xp-body img{
-width:32px;
+.xp-body img{width:32px;}
+
+/* overlays */
+.scanlines,.noise,.vignette{
+position:fixed;
+inset:0;
+pointer-events:none;
+}
+
+.scanlines{
+background:repeating-linear-gradient(to bottom,transparent,transparent 2px,rgba(255,255,255,0.03) 3px);
+}
+
+.noise{
+background:url("https://media.tenor.com/AYOaX8sQ3X8AAAAC/static.gif");
+opacity:0.04;
+}
+
+.vignette{
+background:radial-gradient(circle,transparent 40%,black);
+}
+
+/* windows */
+.window{
+position:absolute;
+top:90px;
+left:200px;
+width:320px;
+background:#d4d0c8;
+border:2px solid white;
+}
+
+.hidden{display:none;}
+
+.titlebar{
+background:linear-gradient(to right,#0a246a,#3a6ea5);
+color:white;
+display:flex;
+justify-content:space-between;
+padding:3px;
+font-size:12px;
+}
+
+.btn{
+width:18px;
+height:16px;
+background:#d4d0c8;
+border:1px solid white;
+cursor:pointer;
+}
+
+.close{background:red;}
+
+.content{
+padding:10px;
+font-size:12px;
 }
