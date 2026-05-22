@@ -29,7 +29,6 @@
 
 <div class="desktop">
 
-<!-- ICONS -->
 <div class="icon" id="mycomputer" style="top:40px;left:30px;">
 <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
 <span>My Computer</span>
@@ -45,7 +44,6 @@
 <span>666.sys</span>
 </div>
 
-<!-- OLD DISCORD ICON -->
 <div class="icon" id="socials" style="top:400px;left:30px;">
 <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
 <span></span>
@@ -56,7 +54,6 @@
 <span></span>
 </div>
 
-<!-- INFO WINDOW -->
 <div class="window hidden" id="infoWin">
 <div class="titlebar">
 <div class="title">System Info</div>
@@ -69,7 +66,6 @@
 </div>
 </div>
 
-<!-- SOCIALS WINDOW -->
 <div class="window hidden" id="socialWin">
 <div class="titlebar">
 <div class="title">Discord</div>
@@ -84,7 +80,6 @@
 
 </div>
 
-<!-- TASKBAR -->
 <div class="taskbar">
 <div class="start">Start</div>
 <div class="clock" id="clock">03:33 AM</div>
@@ -181,11 +176,9 @@ errorLoop();
 
 sys666.onclick = trigger666;
 
-/* INFO */
 info.onclick = () => infoWin.classList.remove("hidden");
 document.getElementById("closeInfo").onclick = () => infoWin.classList.add("hidden");
 
-/* SOCIALS */
 socials.onclick = () => socialWin.classList.remove("hidden");
 document.getElementById("closeSocial").onclick = () => socialWin.classList.add("hidden");
 
