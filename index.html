@@ -3,251 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MY COMPUTER</title>
+<title>My Computer</title>
 
-<link rel="icon" type="image/png" href="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
-
+<link rel="icon" href="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<audio id="bgmusic" loop preload="auto">
-<source src="assets/song.mp3" type="audio/mpeg">
+<audio id="bgmusic" loop>
+<source src="assets/song.mp3">
 </audio>
 
-<audio id="corruptedMusic" preload="auto">
-<source src="assets/song2.mp3" type="audio/mpeg">
+<audio id="corruptMusic" loop>
+<source src="assets/song2.mp3">
 </audio>
 
 <audio id="errorSound">
-<source src="https://files.catbox.moe/j6n0m5.mp3" type="audio/mpeg">
+<source src="https://files.catbox.moe/j6n0m5.mp3">
 </audio>
 
 <div class="scanlines"></div>
 <div class="noise"></div>
 <div class="vignette"></div>
-<div class="flicker"></div>
 
 <div class="desktop">
 
-<div class="icon" id="mycomputer" style="top:40px; left:30px;">
+<div class="icon" id="mycomputer" style="top:40px;left:30px;">
 <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
 <span>My Computer</span>
 </div>
 
-<div class="icon" style="top:130px; left:30px;">
+<div class="icon" id="recycle" style="top:130px;left:30px;">
 <img src="https://win98icons.alexmeub.com/icons/png/recycle_bin_empty-0.png">
 <span>Recycle Bin</span>
 </div>
 
-<div class="icon" id="danger" style="top:220px; left:30px;">
+<div class="icon danger" id="sys666" style="top:220px;left:30px;">
 <img src="https://win98icons.alexmeub.com/icons/png/msg_error-0.png">
 <span>666.sys</span>
 </div>
 
-<div class="icon" id="creditsIcon" style="top:310px; left:30px;">
-<img src="https://win98icons.alexmeub.com/icons/png/msg_information-0.png">
-<span></span>
-</div>
+<!-- WINDOW -->
+<div class="window hidden" id="window">
 
-<div class="window hidden" id="computerWindow">
+<div class="titlebar">
+<div class="title">My Computer</div>
 
-<div class="title-bar">
-<span>My Computer</span>
-
-<div class="title-buttons">
-<div></div>
-<div></div>
-<div class="closeBtn"></div>
-</div>
-</div>
-
-<div class="window-content folders">
-
-<div class="folder">
-<img src="https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs-0.png">
-<span>Documents</span>
-</div>
-
-<div class="folder">
-<img src="https://win98icons.alexmeub.com/icons/png/cd_drive-0.png">
-<span>Disc Drive</span>
-</div>
-
-<div class="folder">
-<img src="https://win98icons.alexmeub.com/icons/png/world-0.png">
-<span>Internet</span>
-</div>
-
-<div class="folder blood" id="bloodFile">
-<img src="https://win98icons.alexmeub.com/icons/png/msg_error-0.png">
-<span>666.sys</span>
-</div>
-
-</div>
-</div>
-
-<div class="window hidden" id="creditsWindow">
-
-<div class="title-bar">
-<span>Info</span>
-
-<div class="title-buttons">
-<div></div>
-<div></div>
-<div class="creditsClose"></div>
-</div>
-</div>
-
-<div class="window-content">
-<p><b>Credits</b></p>
-
-<p>Inspired by creepy ARGs and corrupted Windows XP aesthetics.</p>
-
-<p>Inspired by Wonderland-style horror.</p>
-
-<p>Made by YOU.</p>
-
-<p>2005 - 2006</p>
+<div class="controls">
+<div class="btn">_</div>
+<div class="btn">□</div>
+<div class="btn close" id="close"></div>
 </div>
 
 </div>
 
+<div class="content">
+
+<div class="folder">Documents</div>
+<div class="folder">Disk (C:)</div>
+<div class="folder">Internet</div>
+
+<div class="folder danger" id="file666">666.sys</div>
+
+</div>
 </div>
 
+</div>
+
+<!-- TASKBAR -->
 <div class="taskbar">
 
-<div class="start-button">
+<div class="start">
 <img src="https://win98icons.alexmeub.com/icons/png/windows-0.png">
 Start
 </div>
 
-<div class="tray" id="clock">
-03:33 AM
-</div>
+<div class="clock" id="clock">03:33 AM</div>
 
 </div>
 
-<div id="bsod">
-<div class="bsod-text">
-DONT COME BACK
-</div>
+<!-- RSOD -->
+<div id="rsod" class="hidden">
+<img src="assets/rsod.jpg">
 </div>
 
 <script>
 const music = document.getElementById("bgmusic");
-const corruptedMusic = document.getElementById("corruptedMusic");
+const corruptMusic = document.getElementById("corruptMusic");
 const errorSound = document.getElementById("errorSound");
 
-music.volume = 0.4;
-
-window.addEventListener("click", () => {
-music.play().catch(() => {});
-}, { once:true });
+const win = document.getElementById("window");
+const close = document.getElementById("close");
 
 const mycomputer = document.getElementById("mycomputer");
-const computerWindow = document.getElementById("computerWindow");
+const file666 = document.getElementById("file666");
+const sys666 = document.getElementById("sys666");
+
+const clock = document.getElementById("clock");
+const rsod = document.getElementById("rsod");
+
+let corrupted = false;
+
+window.addEventListener("click", () => {
+music.play();
+}, { once:true });
 
 mycomputer.onclick = () => {
-computerWindow.classList.remove("hidden");
+win.classList.remove("hidden");
 };
 
-document.querySelector(".closeBtn").onclick = () => {
-computerWindow.classList.add("hidden");
+close.onclick = () => {
+win.classList.add("hidden");
 };
 
-const creditsIcon = document.getElementById("creditsIcon");
-const creditsWindow = document.getElementById("creditsWindow");
+function triggerCorruption(){
 
-creditsIcon.onclick = () => {
-creditsWindow.classList.remove("hidden");
-};
+if(corrupted) return;
+corrupted = true;
 
-document.querySelector(".creditsClose").onclick = () => {
-creditsWindow.classList.add("hidden");
-};
-
-const bloodFile = document.getElementById("bloodFile");
-const clock = document.getElementById("clock");
-const bsod = document.getElementById("bsod");
-
-bloodFile.onclick = () => {
+music.pause();
+corruptMusic.play();
 
 clock.innerText = "06:66 AM";
 
-document.body.classList.add("corrupted");
-
-music.pause();
-
-corruptedMusic.volume = 1;
-corruptedMusic.loop = true;
-corruptedMusic.play();
-
-for(let i = 0; i < 18; i++) {
+for(let i=0;i<18;i++){
 
 setTimeout(() => {
 
-const popup = document.createElement("div");
+const p = document.createElement("div");
 
-popup.className = "error-popup";
+p.className = "popup";
 
-popup.style.left = Math.random() * (window.innerWidth - 300) + "px";
-popup.style.top = Math.random() * (window.innerHeight - 200) + "px";
+p.style.left = Math.random()*window.innerWidth + "px";
+p.style.top = Math.random()*window.innerHeight + "px";
 
-popup.innerHTML = `
-<div class="title-bar error">
-<span>FATAL ERROR</span>
+p.innerText = "SYSTEM ERROR: ENTITY DETECTED";
 
-<div class="title-buttons">
-<div></div>
-<div></div>
-<div></div>
-</div>
-</div>
-
-<div class="window-content">
-<p>${[
-"HE IS WATCHING",
-"YOU SHOULD NOT HAVE OPENED IT",
-"NO ESCAPE",
-"WHERE IS YOUR FACE",
-"THEY ARE INSIDE",
-"DO NOT LOOK BEHIND YOU",
-"YOU ARE STILL HERE",
-"WAKE UP",
-"STOP BREATHING",
-"666.SYS ACTIVE",
-"SYSTEM FAILURE",
-"THE WOODS ARE CALLING"
-][Math.floor(Math.random()*12)]}</p>
-</div>
-`;
-
-document.body.appendChild(popup);
+document.body.appendChild(p);
 
 errorSound.currentTime = 0;
 errorSound.play();
 
-}, i * 180);
+}, i*180);
 
 }
 
 setTimeout(() => {
-bsod.style.display = "flex";
-}, 4200);
-
-};
-
-setInterval(() => {
-
-if(document.body.classList.contains("corrupted")) {
-
-document.body.style.filter =
-`hue-rotate(${Math.random()*20}deg) contrast(${1 + Math.random()*0.4})`;
+rsod.classList.remove("hidden");
+}, 2600);
 
 }
 
-}, 90);
+file666.onclick = triggerCorruption;
+sys666.onclick = triggerCorruption;
 
 </script>
 
