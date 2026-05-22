@@ -15,6 +15,10 @@
 <source src="assets/song.mp3" type="audio/mpeg">
 </audio>
 
+<audio id="corruptedMusic" preload="auto">
+<source src="assets/song2.mp3" type="audio/mpeg">
+</audio>
+
 <audio id="errorSound">
 <source src="https://files.catbox.moe/j6n0m5.mp3" type="audio/mpeg">
 </audio>
@@ -37,8 +41,8 @@
 </div>
 
 <div class="icon" id="danger" style="top:220px; left:30px;">
-<img src="https://win98icons.alexmeub.com/icons/png/msg_warning-0.png">
-<span>666</span>
+<img src="https://win98icons.alexmeub.com/icons/png/msg_error-0.png">
+<span>666.sys</span>
 </div>
 
 <div class="window hidden" id="computerWindow">
@@ -72,7 +76,7 @@
 
 <div class="folder blood" id="bloodFile">
 <img src="https://win98icons.alexmeub.com/icons/png/msg_error-0.png">
-<span>666</span>
+<span>666.sys</span>
 </div>
 
 </div>
@@ -103,6 +107,9 @@ DONT COME BACK
 
 <script>
 const music = document.getElementById("bgmusic");
+const corruptedMusic = document.getElementById("corruptedMusic");
+const errorSound = document.getElementById("errorSound");
+
 music.volume = 0.4;
 
 window.addEventListener("click", () => {
@@ -123,7 +130,6 @@ computerWindow.classList.add("hidden");
 const bloodFile = document.getElementById("bloodFile");
 const clock = document.getElementById("clock");
 const bsod = document.getElementById("bsod");
-const errorSound = document.getElementById("errorSound");
 
 bloodFile.onclick = () => {
 
@@ -131,7 +137,13 @@ clock.innerText = "06:66 AM";
 
 document.body.classList.add("corrupted");
 
-for(let i = 0; i < 14; i++) {
+music.pause();
+
+corruptedMusic.volume = 1;
+corruptedMusic.loop = true;
+corruptedMusic.play();
+
+for(let i = 0; i < 18; i++) {
 
 setTimeout(() => {
 
@@ -139,8 +151,8 @@ const popup = document.createElement("div");
 
 popup.className = "error-popup";
 
-popup.style.left = Math.random() * window.innerWidth + "px";
-popup.style.top = Math.random() * window.innerHeight + "px";
+popup.style.left = Math.random() * (window.innerWidth - 300) + "px";
+popup.style.top = Math.random() * (window.innerHeight - 200) + "px";
 
 popup.innerHTML = `
 <div class="title-bar error">
@@ -163,8 +175,11 @@ popup.innerHTML = `
 "DO NOT LOOK BEHIND YOU",
 "YOU ARE STILL HERE",
 "WAKE UP",
-"STOP BREATHING"
-][Math.floor(Math.random()*9)]}</p>
+"STOP BREATHING",
+"666.SYS ACTIVE",
+"SYSTEM FAILURE",
+"THE WOODS ARE CALLING"
+][Math.floor(Math.random()*12)]}</p>
 </div>
 `;
 
@@ -173,13 +188,13 @@ document.body.appendChild(popup);
 errorSound.currentTime = 0;
 errorSound.play();
 
-}, i * 250);
+}, i * 180);
 
 }
 
 setTimeout(() => {
 bsod.style.display = "flex";
-}, 4500);
+}, 4200);
 
 };
 
@@ -193,6 +208,17 @@ icon.style.transform =
 });
 
 }, 120);
+
+setInterval(() => {
+
+if(document.body.classList.contains("corrupted")) {
+
+document.body.style.filter =
+`hue-rotate(${Math.random()*20}deg) contrast(${1 + Math.random()*0.4})`;
+
+}
+
+}, 90);
 
 </script>
 
