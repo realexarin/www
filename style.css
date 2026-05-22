@@ -1,14 +1,8 @@
-*{
-box-sizing:border-box;
-}
-
 body{
 margin:0;
 overflow:hidden;
-font-family:Tahoma,sans-serif;
+font-family:Tahoma;
 background:black;
-cursor:default;
-image-rendering:pixelated;
 }
 
 .desktop{
@@ -16,7 +10,7 @@ width:100vw;
 height:100vh;
 position:relative;
 background:
-linear-gradient(rgba(0,0,0,0.15),rgba(0,0,0,0.45)),
+linear-gradient(rgba(0,0,0,0.25),rgba(0,0,0,0.65)),
 url("https://upload.wikimedia.org/wikipedia/commons/6/66/Foggy_forest.jpg");
 background-size:cover;
 background-position:center;
@@ -24,296 +18,152 @@ background-position:center;
 
 .icon{
 position:absolute;
-width:74px;
+width:80px;
 text-align:center;
-font-size:11px;
 color:white;
-text-shadow:1px 1px 2px black;
-user-select:none;
-transition:0.1s;
+font-size:11px;
 cursor:pointer;
-z-index:100;
-}
-
-.icon:hover{
-background:rgba(255,255,255,0.08);
+text-shadow:1px 1px 2px black;
 }
 
 .icon img{
-width:34px;
-height:34px;
-pointer-events:none;
+width:40px;
 }
 
 .icon span{
 display:block;
-margin-top:4px;
-pointer-events:none;
 }
 
 .window{
 position:absolute;
-top:90px;
-left:170px;
-width:620px;
+top:80px;
+left:200px;
+width:500px;
 background:#d4d0c8;
-border:2px solid #ece9d8;
-box-shadow:
-inset -2px -2px #404040,
-inset 2px 2px white,
-0 0 25px rgba(0,0,0,0.7);
-z-index:999;
+border:2px solid #fff;
+box-shadow:inset -2px -2px #888;
 }
 
-#creditsWindow{
-width:340px;
-left:500px;
-top:160px;
-}
+.hidden{display:none;}
 
-.title-bar{
-height:30px;
-background:
-linear-gradient(to right,#0a246a,#3a6ee8,#7ba7ff);
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 8px;
+.titlebar{
+background:linear-gradient(to right,#0a246a,#3a6ea5);
 color:white;
-font-size:12px;
-font-weight:bold;
-}
-
-.title-bar.error{
-background:
-linear-gradient(to right,#450000,#c00000);
-}
-
-.title-buttons{
 display:flex;
-gap:4px;
+justify-content:space-between;
+padding:3px;
+font-size:12px;
 }
 
-.title-buttons div{
-width:16px;
+.controls{
+display:flex;
+gap:3px;
+}
+
+.btn{
+width:18px;
 height:16px;
 background:#d4d0c8;
-border:1px solid white;
-box-shadow:
-inset -1px -1px #808080,
-inset 1px 1px white;
+text-align:center;
+font-size:10px;
 cursor:pointer;
 }
 
-.closeBtn,
-.creditsClose{
-background:#ff5b5b !important;
+.close{
+background:red;
 }
 
-.window-content{
-padding:14px;
-font-size:13px;
-color:black;
-}
-
-.folders{
+.content{
+padding:10px;
 display:flex;
-gap:40px;
+gap:20px;
 flex-wrap:wrap;
 }
 
 .folder{
-text-align:center;
-font-size:12px;
 width:80px;
+text-align:center;
+font-size:11px;
 cursor:pointer;
 }
 
 .folder img{
-width:40px;
-pointer-events:none;
+width:32px;
 }
 
-.folder:hover{
-filter:brightness(1.2);
-}
-
-.blood img{
-filter:hue-rotate(-50deg) saturate(6);
+.danger{
+color:red;
 }
 
 .taskbar{
 position:fixed;
 bottom:0;
 width:100%;
-height:40px;
-background:
-linear-gradient(to top,#245edb,#3f8cff);
+height:35px;
+background:linear-gradient(to top,#1c5ed6,#3a8bff);
 display:flex;
 justify-content:space-between;
 align-items:center;
-border-top:1px solid #79aaff;
-z-index:9999;
+padding:0 10px;
+color:white;
 }
 
-.start-button{
-margin-left:7px;
-height:31px;
-padding:0 16px;
+.start{
+background:green;
+padding:4px 10px;
+border-radius:3px;
 display:flex;
 align-items:center;
-gap:7px;
-border-radius:3px;
-background:
-linear-gradient(to bottom,#46c652,#1f8d2d);
-color:white;
-font-weight:bold;
-font-size:14px;
-box-shadow:
-inset 0 1px rgba(255,255,255,0.5);
+gap:5px;
 }
 
-.start-button img{
-width:18px;
+.clock{
+background:rgba(255,255,255,0.2);
+padding:3px 10px;
 }
 
-.tray{
-margin-right:10px;
-background:rgba(255,255,255,0.12);
-padding:6px 14px;
-font-size:12px;
-color:white;
+.scanlines,
+.noise,
+.vignette{
+pointer-events:none;
+position:fixed;
+inset:0;
 }
 
 .scanlines{
-position:fixed;
-inset:0;
-pointer-events:none;
-background:
-repeating-linear-gradient(
-to bottom,
-rgba(255,255,255,0.03),
-rgba(255,255,255,0.03) 1px,
-transparent 1px,
-transparent 3px
-);
-z-index:99999;
+background:repeating-linear-gradient(to bottom,transparent,transparent 2px,rgba(255,255,255,0.03) 3px);
 }
 
 .noise{
-position:fixed;
-inset:0;
-pointer-events:none;
-opacity:0.05;
-background-image:url("https://media.tenor.com/AYOaX8sQ3X8AAAAC/static.gif");
-mix-blend-mode:screen;
-z-index:99998;
-}
-
-.flicker{
-position:fixed;
-inset:0;
-pointer-events:none;
-background:rgba(255,255,255,0.02);
-animation:flicker 0.08s infinite;
-z-index:99997;
+background:url("https://media.tenor.com/AYOaX8sQ3X8AAAAC/static.gif");
+opacity:0.04;
 }
 
 .vignette{
-position:fixed;
-inset:0;
-pointer-events:none;
-background:
-radial-gradient(circle,
-transparent 45%,
-rgba(0,0,0,0.55));
-z-index:99996;
+background:radial-gradient(circle,transparent 40%,black);
 }
 
-.error-popup{
-position:absolute;
-width:260px;
-background:#d4d0c8;
-border:2px solid white;
-z-index:999999;
-box-shadow:0 0 30px red;
-animation:popupGlitch 0.09s infinite;
-}
-
-#bsod{
+#rsod{
 position:fixed;
 inset:0;
-background:#2a0000;
-display:none;
-justify-content:center;
+background:black;
+display:flex;
 align-items:center;
-z-index:9999999;
-animation:violent 0.08s infinite;
+justify-content:center;
+z-index:9999;
 }
 
-.bsod-text{
-color:white;
-font-size:72px;
-font-weight:bold;
-font-family:Tahoma,sans-serif;
-letter-spacing:6px;
-animation:blink 0.4s infinite;
-text-shadow:0 0 20px red;
+#rsod img{
+width:100%;
+height:100%;
+object-fit:cover;
 }
 
-.hidden{
-display:none;
-}
-
-.corrupted .desktop{
-animation:violent 0.07s infinite;
-filter:contrast(1.4) saturate(0.15);
-}
-
-@keyframes flicker{
-0%{opacity:0.02;}
-50%{opacity:0.06;}
-100%{opacity:0.02;}
-}
-
-@keyframes blink{
-50%{
-opacity:0;
-}
-}
-
-@keyframes popupGlitch{
-0%{
-transform:translate(0);
-}
-25%{
-transform:translate(-3px,2px);
-}
-50%{
-transform:translate(3px,-2px);
-}
-75%{
-transform:translate(-2px,-2px);
-}
-100%{
-transform:translate(0);
-}
-}
-
-@keyframes violent{
-0%{
-transform:translate(0);
-}
-25%{
-transform:translate(-4px,2px);
-}
-50%{
-transform:translate(4px,-2px);
-}
-75%{
-transform:translate(-2px,-3px);
-}
-100%{
-transform:translate(0);
-}
+.popup{
+position:absolute;
+background:#111;
+color:red;
+padding:10px;
+border:1px solid red;
+font-size:12px;
 }
