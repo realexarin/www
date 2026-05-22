@@ -16,11 +16,10 @@ width:100vw;
 height:100vh;
 position:relative;
 background:
-linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.82)),
-url("https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=1920&auto=format&fit=crop");
+linear-gradient(rgba(0,0,0,0.15),rgba(0,0,0,0.45)),
+url("https://upload.wikimedia.org/wikipedia/commons/6/66/Foggy_forest.jpg");
 background-size:cover;
 background-position:center;
-animation:bgPulse 8s infinite alternate;
 }
 
 .icon{
@@ -32,6 +31,8 @@ color:white;
 text-shadow:1px 1px 2px black;
 user-select:none;
 transition:0.1s;
+cursor:pointer;
+z-index:100;
 }
 
 .icon:hover{
@@ -41,11 +42,13 @@ background:rgba(255,255,255,0.08);
 .icon img{
 width:34px;
 height:34px;
+pointer-events:none;
 }
 
 .icon span{
 display:block;
 margin-top:4px;
+pointer-events:none;
 }
 
 .window{
@@ -59,6 +62,13 @@ box-shadow:
 inset -2px -2px #404040,
 inset 2px 2px white,
 0 0 25px rgba(0,0,0,0.7);
+z-index:999;
+}
+
+#creditsWindow{
+width:340px;
+left:500px;
+top:160px;
 }
 
 .title-bar{
@@ -92,9 +102,11 @@ border:1px solid white;
 box-shadow:
 inset -1px -1px #808080,
 inset 1px 1px white;
+cursor:pointer;
 }
 
-.closeBtn{
+.closeBtn,
+.creditsClose{
 background:#ff5b5b !important;
 }
 
@@ -114,10 +126,12 @@ flex-wrap:wrap;
 text-align:center;
 font-size:12px;
 width:80px;
+cursor:pointer;
 }
 
 .folder img{
 width:40px;
+pointer-events:none;
 }
 
 .folder:hover{
@@ -183,26 +197,26 @@ rgba(255,255,255,0.03) 1px,
 transparent 1px,
 transparent 3px
 );
-z-index:999;
+z-index:99999;
 }
 
 .noise{
 position:fixed;
 inset:0;
 pointer-events:none;
-opacity:0.08;
+opacity:0.05;
 background-image:url("https://media.tenor.com/AYOaX8sQ3X8AAAAC/static.gif");
 mix-blend-mode:screen;
-z-index:998;
+z-index:99998;
 }
 
 .flicker{
 position:fixed;
 inset:0;
 pointer-events:none;
-background:rgba(255,255,255,0.03);
-animation:flicker 0.05s infinite;
-z-index:997;
+background:rgba(255,255,255,0.02);
+animation:flicker 0.08s infinite;
+z-index:99997;
 }
 
 .vignette{
@@ -211,9 +225,9 @@ inset:0;
 pointer-events:none;
 background:
 radial-gradient(circle,
-transparent 35%,
-rgba(0,0,0,0.9));
-z-index:996;
+transparent 45%,
+rgba(0,0,0,0.55));
+z-index:99996;
 }
 
 .error-popup{
@@ -221,7 +235,7 @@ position:absolute;
 width:260px;
 background:#d4d0c8;
 border:2px solid white;
-z-index:99999;
+z-index:999999;
 box-shadow:0 0 30px red;
 animation:popupGlitch 0.09s infinite;
 }
@@ -233,7 +247,7 @@ background:#2a0000;
 display:none;
 justify-content:center;
 align-items:center;
-z-index:999999;
+z-index:9999999;
 animation:violent 0.08s infinite;
 }
 
@@ -257,9 +271,9 @@ filter:contrast(1.4) saturate(0.15);
 }
 
 @keyframes flicker{
-0%{opacity:0.03;}
-50%{opacity:0.1;}
-100%{opacity:0.03;}
+0%{opacity:0.02;}
+50%{opacity:0.06;}
+100%{opacity:0.02;}
 }
 
 @keyframes blink{
@@ -301,14 +315,5 @@ transform:translate(-2px,-3px);
 }
 100%{
 transform:translate(0);
-}
-}
-
-@keyframes bgPulse{
-0%{
-filter:brightness(0.9) saturate(0.7);
-}
-100%{
-filter:brightness(0.55) saturate(0.25);
 }
 }
