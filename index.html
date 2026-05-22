@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MY COMPUTER</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<audio autoplay loop>
+  <source src="assets/song.mp3" type="audio/mpeg">
+</audio>
+
+<div class="scanlines"></div>
+<div class="noise"></div>
+
+<!-- Desktop -->
+<div class="desktop">
+
+  <!-- Icons -->
+  <div class="icon" style="top:40px; left:30px;">
+    <img src="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
+    <span>My Computer</span>
+  </div>
+
+  <div class="icon" style="top:140px; left:30px;">
+    <img src="https://win98icons.alexmeub.com/icons/png/recycle_bin_empty-0.png">
+    <span>Recycle Bin</span>
+  </div>
+
+  <div class="icon glitch-icon" style="top:240px; left:30px;">
+    <img src="https://win98icons.alexmeub.com/icons/png/msg_warning-0.png">
+    <span>DO_NOT_OPEN</span>
+  </div>
+
+  <!-- Main Window -->
+  <div class="window">
+    <div class="title-bar">
+      <span>system_log.txt</span>
+      <div class="buttons">
+        <button>X</button>
+      </div>
+    </div>
+
+    <div class="window-content">
+      <p>Microsoft Windows XP [Version 5.1.2600]</p>
+      <p>(C) Copyright 1985-2005 Microsoft Corp.</p>
+
+      <br>
+
+      <p>loading user profile...</p>
+      <p>checking memory...</p>
+      <p class="red">warning detected</p>
+
+      <br>
+
+      <p>> there used to be 6 users here</p>
+      <p>> recovery impossible</p>
+      <p>> don't open explorer.exe</p>
+
+      <br>
+
+      <p class="blink">connection unstable</p>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="popup">
+    <div class="title-bar error">
+      <span>Explorer.exe</span>
+      <div class="buttons">
+        <button>X</button>
+      </div>
+    </div>
+
+    <div class="window-content">
+      <p>memory could not be read</p>
+      <button class="ok">OK</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Taskbar -->
+<div class="taskbar">
+  <div class="start-button">Start</div>
+
+  <div class="taskbar-text">
+    3:72 AM
+  </div>
+</div>
+
+<script>
+document.body.addEventListener("click", () => {
+  document.querySelector("audio").play();
+});
+
+setInterval(() => {
+  document.querySelector(".popup").classList.toggle("hide");
+}, 9000);
+
+setInterval(() => {
+  document.querySelector(".glitch-icon").classList.toggle("shake");
+}, 2000);
+</script>
+
+</body>
+</html>
