@@ -45,6 +45,11 @@
 <span>666.sys</span>
 </div>
 
+<div class="icon" id="creditsIcon" style="top:310px; left:30px;">
+<img src="https://win98icons.alexmeub.com/icons/png/msg_information-0.png">
+<span></span>
+</div>
+
 <div class="window hidden" id="computerWindow">
 
 <div class="title-bar">
@@ -82,6 +87,32 @@
 </div>
 </div>
 
+<div class="window hidden" id="creditsWindow">
+
+<div class="title-bar">
+<span>Info</span>
+
+<div class="title-buttons">
+<div></div>
+<div></div>
+<div class="creditsClose"></div>
+</div>
+</div>
+
+<div class="window-content">
+<p><b>Credits</b></p>
+
+<p>Inspired by creepy ARGs and corrupted Windows XP aesthetics.</p>
+
+<p>Inspired by Wonderland-style horror.</p>
+
+<p>Made by YOU.</p>
+
+<p>2005 - 2006</p>
+</div>
+
+</div>
+
 </div>
 
 <div class="taskbar">
@@ -98,11 +129,9 @@ Start
 </div>
 
 <div id="bsod">
-
 <div class="bsod-text">
 DONT COME BACK
 </div>
-
 </div>
 
 <script>
@@ -125,6 +154,17 @@ computerWindow.classList.remove("hidden");
 
 document.querySelector(".closeBtn").onclick = () => {
 computerWindow.classList.add("hidden");
+};
+
+const creditsIcon = document.getElementById("creditsIcon");
+const creditsWindow = document.getElementById("creditsWindow");
+
+creditsIcon.onclick = () => {
+creditsWindow.classList.remove("hidden");
+};
+
+document.querySelector(".creditsClose").onclick = () => {
+creditsWindow.classList.add("hidden");
 };
 
 const bloodFile = document.getElementById("bloodFile");
@@ -197,17 +237,6 @@ bsod.style.display = "flex";
 }, 4200);
 
 };
-
-setInterval(() => {
-
-document.querySelectorAll(".icon").forEach(icon => {
-
-icon.style.transform =
-`translate(${Math.random()*2}px, ${Math.random()*2}px)`;
-
-});
-
-}, 120);
 
 setInterval(() => {
 
