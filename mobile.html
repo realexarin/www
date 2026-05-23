@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+        (function() {
+            var ua = navigator.userAgent.toLowerCase();
+            var isMobile = /iphone|ipad|ipod|android/i.test(ua);
+            var isDesktop = /macintosh|mac os x|windows|linux/i.test(ua) && !isMobile;
+            if (isDesktop) {
+                window.location.replace("default.html");
+            }
+        })();
+    </script>
+    <title>My Computer - Mobile Edition</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="icon" type="image/png" href="https://win98icons.alexmeub.com/icons/png/computer_explorer-0.png">
+    <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Tahoma, Geneva, sans-serif;
+            background-color: #008080;
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            font-size: 14px;
+        }
+
+        /* --- DESKTOP --- */
+        #desktop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+        .desktop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+            gap: 20px;
+            justify-items: center;
+        }
+        .app-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 75px;
+            cursor: pointer;
+            outline: none;
+        }
+        .app-icon img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 6px;
+        }
+        .app-icon span {
+            color: white;
+            font-size: 11px;
+            text-shadow: 1px 1px 1px #000;
+            padding: 2px 4px;
+            word-break: break-word;
+            border: 1px solid transparent;
+        }
+        .app-icon:active span {
+            background-color: #000080;
+            border: 1px dotted #ffff00;
+        }
+
+        /* --- TASKBAR --- */
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40px;
+            background-color: #c0c0c0;
+            border-top: 2px outset #ffffff;
+            box-shadow: 0 -1px 0px #808080;
+            display: flex;
+            align-items: center;
+            padding: 0 6px;
+            z-index: 9999;
+        }
+        #start-button {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: bold;
+            font-size: 13px;
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            box-shadow: 1px 1px 0px 0px #000;
+            height: 28px;
+            padding: 0 8px;
+            cursor: pointer;
+        }
+        #start-button img {
+            width: 16px;
+            height: 16px;
+        }
+        #start-button:active, #start-button.active {
+            border: 2px inset #ffffff;
+            box-shadow: -1px -1px 0px 0px #000;
+            background-color: #e0e0e0;
+        }
+        #task-container {
+            flex-grow: 1;
+            margin: 0 8px;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            height: 28px;
+            align-items: center;
+        }
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            box-shadow: 1px 1px 0px 0px #000;
+            height: 28px;
+            padding: 0 6px;
+            min-width: 60px;
+            max-width: 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .task-item.active {
+            border: 2px inset #ffffff;
+            box-shadow: -1px -1px 0px 0px #000;
+            background-color: #e0e0e0;
+            font-weight: bold;
+        }
+        .task-item img {
+            width: 14px;
+            height: 14px;
+        }
+        #notification-tray {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 2px inset #ffffff;
+            background-color: #c0c0c0;
+            height: 28px;
+            padding: 0 8px;
+            font-size: 11px;
+        }
+        #notification-tray img {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* --- START MENU --- */
+        #start-menu {
+            display: none;
+            position: fixed;
+            bottom: 40px;
+            left: 2px;
+            width: 220px;
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            box-shadow: 1px 1px 2px #000;
+            z-index: 10000;
+        }
+        .start-menu-sidebar {
+            width: 25px;
+            background: linear-gradient(180deg, #000080, #1084d0);
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            text-align: center;
+            padding: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            letter-spacing: 1px;
+        }
+        .start-menu-body {
+            display: flex;
+            width: 100%;
+        }
+        .start-menu-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .start-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            color: black;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        .start-menu-item img {
+            width: 22px;
+            height: 22px;
+        }
+        .start-menu-item:active, .start-menu-item:hover {
+            background-color: #000080;
+            color: white;
+        }
+        .start-menu-divider {
+            height: 2px;
+            background-color: #808080;
+            border-bottom: 1px solid #ffffff;
+            margin: 4px 0;
+        }
+
+        /* --- WINDOW SYSTEM --- */
+        .window {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 40px;
+            background-color: #c0c0c0;
+            z-index: 1000;
+            flex-direction: column;
+            padding: 2px;
+            border: 2px outset #ffffff;
+        }
+        .window.active-window {
+            z-index: 1005;
+        }
+        .title-bar {
+            background: linear-gradient(90deg, #808080 0%, #c0c0c0 100%);
+            color: #d8d8d8;
+            padding: 3px 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: bold;
+            font-size: 13px;
+            height: 24px;
+        }
+        .active-window .title-bar {
+            background: linear-gradient(90deg, #08216b 0%, #a5cef7 100%);
+            color: white;
+        }
+        .title-bar-info {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .title-bar-info img {
+            width: 16px;
+            height: 16px;
+        }
+        .title-bar-controls {
+            display: flex;
+            gap: 2px;
+        }
+        .win-btn {
+            width: 18px;
+            height: 18px;
+            background-color: #c0c0c0;
+            border: 1.5px solid #ffffff;
+            border-right-color: #424242;
+            border-bottom-color: #424242;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            outline: none;
+        }
+        .win-btn img {
+            width: 10px;
+            height: 10px;
+        }
+        .win-btn:active {
+            border: 1.5px inset #ffffff;
+        }
+        .menu-bar {
+            display: flex;
+            gap: 8px;
+            padding: 2px 6px;
+            font-size: 11px;
+            border-bottom: 1.5px solid #808080;
+            box-shadow: 0 1px 0 #fff;
+            background-color: #c0c0c0;
+        }
+        .menu-bar a {
+            text-decoration: none;
+            color: black;
+        }
+        .menu-bar a span {
+            text-decoration: underline;
+        }
+        .window-content {
+            flex-grow: 1;
+            background-color: white;
+            border: 2px inset #ffffff;
+            overflow-y: auto;
+            position: relative;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- APP SPECIFIC STYLES --- */
+        /* Explorer */
+        .explorer-header-info {
+            background-color: #c0c0c0;
+            padding: 4px;
+            border-bottom: 1px solid #808080;
+        }
+        .explorer-address-bar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+        .explorer-address-bar input {
+            flex-grow: 1;
+            border: 2px inset #ffffff;
+            background-color: white;
+            padding: 2px 4px;
+            font-size: 11px;
+            outline: none;
+        }
+        .explorer-layout {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            height: 100%;
+        }
+        .explorer-sidebar {
+            background-color: #e0e0e0;
+            background-image: url(./images/explorercorner.jpg);
+            background-repeat: no-repeat;
+            background-position: bottom left;
+            padding: 10px;
+            border-bottom: 2px solid #808080;
+            font-size: 11px;
+        }
+        .explorer-sidebar-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+        .explorer-sidebar-divider {
+            height: 2px;
+            background: linear-gradient(90deg, red, yellow, green, blue);
+            margin: 4px 0 8px 0;
+        }
+        .explorer-files {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: white;
+        }
+        .explorer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 15px;
+            justify-items: center;
+        }
+        .explorer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 70px;
+            cursor: pointer;
+        }
+        .explorer-item img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 4px;
+        }
+        .explorer-item span {
+            font-size: 11px;
+            color: black;
+            word-break: break-word;
+            padding: 1px 2px;
+        }
+        .explorer-item:active span {
+            background-color: #000080;
+            color: white;
+        }
+
+        /* Minesweeper Window Frame */
+        #minesweeper-frame-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 10px;
+            background-color: #bdbdbd;
+            height: 100%;
+            overflow: auto;
+        }
+        #mine-frame {
+            border: none;
+            width: 100%;
+            height: 100%;
+            min-height: 480px;
+        }
+
+        /* Notepad Styling */
+        .notepad-textarea {
+            width: 100%;
+            height: 100%;
+            border: none;
+            resize: none;
+            padding: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 13px;
+            outline: none;
+            background-color: white;
+            box-sizing: border-box;
+            flex-grow: 1;
+        }
+
+        /* Mail App Styling */
+        .mail-layout {
+            padding: 15px;
+            font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #ffffff;
+            height: 100%;
+        }
+        .mail-header-row {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #c0c0c0;
+            padding-bottom: 6px;
+        }
+        .mail-header-label {
+            width: 60px;
+            font-weight: bold;
+            color: #808080;
+        }
+        .mail-header-val {
+            flex-grow: 1;
+        }
+        .mail-body {
+            border: 2px inset #ffffff;
+            background: #fff;
+            padding: 10px;
+            flex-grow: 1;
+            overflow-y: auto;
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+        }
+        .mail-btn-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body onload="initMobile()">
+    <div id="desktop" onclick="closeStartMenu()">
+        <div class="desktop-grid">
+            <div class="app-icon" onclick="openApp('explorer'); navigateToMobilePath('My Computer');">
+                <img src="./images/computer_explorer.ico" />
+                <span>My Computer</span>
+            </div>
+            <div class="app-icon" onclick="openApp('notepad')">
+                <img src="./images/notepad.ico" />
+                <span>About Me</span>
+            </div>
+            <div class="app-icon" onclick="openApp('mail')">
+                <img src="./images/mail.ico" />
+                <span>Contact Me</span>
+            </div>
+            <div class="app-icon" onclick="openApp('minesweeper')">
+                <img src="./images/minesweeper.ico" />
+                <span>Minesweeper</span>
+            </div>
+            <div class="app-icon" onclick="openApp('explorer'); navigateToMobilePath('C:\\');">
+                <img src="./images/directory_closed.ico" />
+                <span>File Explorer</span>
+            </div>
+            <div class="app-icon" onclick="openApp('cmd')">
+                <img src="https://win98icons.alexmeub.com/icons/png/console_prompt-1.png" />
+                <span>MS-DOS Prompt</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- WINDOWS -->
+
+    <!-- Notepad (About Me) Window -->
+    <div id="win-notepad" class="window" onclick="bringToFront('notepad')">
+        <div class="title-bar">
+            <div class="title-bar-info">
+                <img src="./images/notepad.ico" />
+                <span>About Me - Notepad</span>
+            </div>
+            <div class="title-bar-controls">
+                <button class="win-btn" onclick="closeApp('notepad')">
+                    <img src="./images/window/close.png" />
+                </button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <a href="#"><span>F</span>ile</a>
+            <a href="#"><span>E</span>dit</a>
+            <a href="#"><span>S</span>earch</a>
+            <a href="#"><span>H</span>elp</a>
+        </div>
+        <div class="window-content">
+            <textarea class="notepad-textarea" readonly>
+Microsoft(R) Notepad Mobile
+(C) Copyright 1998 Microsoft Corp.
+
+Hello, im exarin Welcome to my Website
+I Develop in Almost every Programming Language / Engine.
+
+Feel free to Look around!
+            </textarea>
+        </div>
+    </div>
+
+    <!-- Mail (Contact Me) Window -->
+    <div id="win-mail" class="window" onclick="bringToFront('mail')">
+        <div class="title-bar">
+            <div class="title-bar-info">
+                <img src="./images/mail.ico" />
+                <span>Contact Me</span>
+            </div>
+            <div class="title-bar-controls">
+                <button class="win-btn" onclick="closeApp('mail')">
+                    <img src="./images/window/close.png" />
+                </button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <a href="#"><span>F</span>ile</a>
+            <a href="#"><span>E</span>dit</a>
+            <a href="#"><span>V</span>iew</a>
+            <a href="#"><span>H</span>elp</a>
+        </div>
+        <div class="window-content">
+            <div class="mail-layout">
+                <div class="mail-header-row">
+                    <div class="mail-header-label">To:</div>
+                    <div class="mail-header-val"><b>Developer Support</b> &lt;dev@win98.local&gt;</div>
+                </div>
+                <div class="mail-header-row">
+                    <div class="mail-header-label">Subject:</div>
+                    <div class="mail-header-val">Hello from Mobile!</div>
+                </div>
+                <div class="mail-body">
+                    <p style="margin-top: 0;">Hello [username],</p>
+                    <p>You can find my Contact details below:</p>
+                    <p style="margin-bottom: 0;">
+                        <span onclick="copyDiscord(this)" style="color: blue; text-decoration: underline; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 4px; border: 1px outset #fff; background: #e0e0e0; padding: 3px 8px; box-shadow: 1px 1px 0 #000; font-family: Tahoma, Geneva, sans-serif; font-size: 11px;">
+                            <i class="fa fa-comments"></i> Discord
+                        </span>
+                    </p>
+                </div>
+                <div class="mail-btn-row">
+                    <button class="win98-btn" onclick="closeApp('mail')">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Minesweeper Window -->
+    <div id="win-minesweeper" class="window" onclick="bringToFront('minesweeper')">
+        <div class="title-bar">
+            <div class="title-bar-info">
+                <img src="./images/minesweeper.ico" />
+                <span>Minesweeper</span>
+            </div>
+            <div class="title-bar-controls">
+                <button class="win-btn" onclick="closeApp('minesweeper')">
+                    <img src="./images/window/close.png" />
+                </button>
+            </div>
+        </div>
+        <div class="window-content" style="background-color: #bdbdbd;">
+            <div id="minesweeper-frame-container">
+                <iframe src="./minesweeper/minesweeper.html" id="mine-frame" scrolling="no"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Command Prompt (MS-DOS) Window -->
+    <div id="win-cmd" class="window" onclick="bringToFront('cmd')">
+        <div class="title-bar">
+            <div class="title-bar-info">
+                <img src="https://win98icons.alexmeub.com/icons/png/console_prompt-1.png" style="width: 16px; height: 16px;" />
+                <span>MS-DOS Prompt</span>
+            </div>
+            <div class="title-bar-controls">
+                <button class="win-btn" onclick="closeApp('cmd')">
+                    <img src="./images/window/close.png" />
+                </button>
+            </div>
+        </div>
+        <!-- Menu-style Toolbar inside CMD (classic Win98 DOS toolbar) -->
+        <div style="background: #c0c0c0; border-bottom: 1px solid #808080; padding: 2px 4px; display: flex; align-items: center; gap: 8px; font-family: Tahoma, Geneva, sans-serif; font-size: 11px; color: #000; user-select: none; box-sizing: border-box; width: 100%;">
+            <span style="font-weight: bold;">Auto</span>
+            <span style="width: 1px; height: 12px; background: #808080;"></span>
+            <button style="border: 1px outset #fff; background: #c0c0c0; padding: 1px 5px; font-size: 11px; cursor: default;">A</button>
+            <button style="border: 1px outset #fff; background: #c0c0c0; padding: 1px 5px; font-size: 11px; cursor: default;"><i class="fa fa-font"></i></button>
+            <button style="border: 1px outset #fff; background: #c0c0c0; padding: 1px 5px; font-size: 11px; cursor: default;"><i class="fa fa-refresh"></i></button>
+        </div>
+        <div id="mobile-cmd-terminal" style="flex-grow: 1; background: #000; color: #c0c0c0; font-family: 'Courier New', Courier, monospace; font-size: 13px; padding: 8px; overflow-y: auto; outline: none; cursor: text; box-sizing: border-box; width: 100%;" onclick="focusMobileTerminal()">
+            <div id="mobile-cmd-history">
+                Microsoft(R) Windows 98<br>
+                (C)Copyright Microsoft Corp 1981-1998.<br>
+                <br>
+            </div>
+            <div style="display: flex; align-items: center; width: 100%;">
+                <span id="mobile-cmd-prompt-path" style="white-space: nowrap;">C:\WINDOWS&gt;</span>
+                <input type="text" id="mobile-cmd-input" style="flex-grow: 1; background: transparent; border: none; outline: none; color: #c0c0c0; font-family: 'Courier New', Courier, monospace; font-size: 13px; margin-left: 4px; caret-color: #c0c0c0; width: 100%; box-sizing: border-box;" onkeydown="handleMobileTerminalInput(event)" />
+            </div>
+        </div>
+    </div>
+
+    <!-- File Explorer Window -->
+    <div id="win-explorer" class="window" onclick="bringToFront('explorer')">
+        <div class="title-bar">
+            <div class="title-bar-info">
+                <img src="./images/directory_closed.ico" id="mobile-explorer-title-icon" />
+                <span id="mobile-explorer-title">File Explorer</span>
+            </div>
+            <div class="title-bar-controls">
+                <button class="win-btn" onclick="closeApp('explorer')">
+                    <img src="./images/window/close.png" />
+                </button>
+            </div>
+        </div>
+        <div class="menu-bar">
+            <a href="#"><span>F</span>ile</a>
+            <a href="#"><span>E</span>dit</a>
+            <a href="#"><span>V</span>iew</a>
+            <a href="#"><span>G</span>o</a>
+        </div>
+        <div class="explorer-header-info">
+            <div class="explorer-address-bar">
+                <span>Address:</span>
+                <input type="text" id="mobile-address-bar" value="C:\My Projects" onkeypress="handleMobileAddressBarKey(event)" />
+            </div>
+        </div>
+        <div class="window-content">
+            <div class="explorer-layout">
+                <div class="explorer-sidebar">
+                    <div class="explorer-sidebar-title" id="mobile-sidebar-title">My Projects</div>
+                    <div class="explorer-sidebar-divider"></div>
+                    <div id="mobile-sidebar-desc">Select an item to view or open it.</div>
+                </div>
+                <div class="explorer-files">
+                    <div class="explorer-grid" id="mobile-explorer-grid">
+                        <!-- Dynamically loaded -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TASKBAR & START MENU -->
+    <div id="taskbar">
+        <button id="start-button" onclick="toggleStartMenu(event)">
+            <img src="./images/windows.ico" />
+            <span>Start</span>
+        </button>
+        <div id="task-container"></div>
+        <div id="notification-tray">
+            <img src="./images/volume.ico" />
+            <div id="clock">12:00 PM</div>
+        </div>
+    </div>
+
+    <div id="start-menu" onclick="event.stopPropagation()">
+        <div class="start-menu-body">
+            <div class="start-menu-sidebar">Windows 98</div>
+            <div class="start-menu-content">
+                <a class="start-menu-item" href="#" onclick="openApp('minesweeper'); closeStartMenu();">
+                    <img src="./images/minesweeper.ico" />
+                    <span>Minesweeper</span>
+                </a>
+                <a class="start-menu-item" href="#" onclick="openApp('explorer'); navigateToMobilePath('C:\\My Projects'); closeStartMenu();">
+                    <img src="./images/directory_closed.ico" />
+                    <span>Programs</span>
+                </a>
+                <a class="start-menu-item" href="#" onclick="openApp('cmd'); closeStartMenu();">
+                    <img src="https://win98icons.alexmeub.com/icons/png/console_prompt-1.png" />
+                    <span>MS-DOS Prompt</span>
+                </a>
+                <a class="start-menu-item" href="#" onclick="openApp('notepad'); closeStartMenu();">
+                    <img src="./images/notepad.ico" />
+                    <span>About Me</span>
+                </a>
+                <a class="start-menu-item" href="#" onclick="openApp('mail'); closeStartMenu();">
+                    <img src="./images/mail.ico" />
+                    <span>Contact Me</span>
+                </a>
+                <a class="start-menu-item" href="#" onclick="openMobileRunDialog(); closeStartMenu();">
+                    <img src="./images/application_hourglass_small.ico" />
+                    <span>Run...</span>
+                </a>
+                <div class="start-menu-divider"></div>
+                <a class="start-menu-item" href="#" onclick="openMobileShutdownDialog(); closeStartMenu();">
+                    <img src="./images/shut_down_cool.ico" />
+                    <span>Shut Down...</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Win98 Mobile Run Dialog Overlay -->
+    <div id="mobile-run-dialog-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:100000; align-items:center; justify-content:center;">
+        <div id="mobile-run-dialog" style="background:#c0c0c0; border:2px solid #fff; border-right-color:#000; border-bottom-color:#000; box-shadow:inset -1px -1px 0 #808080, inset 1px 1px 0 #fff; width:min(350px, 94vw); font-family:Tahoma,Geneva,sans-serif; font-size:12px; user-select:none; padding:3px; box-sizing: border-box;">
+            <div style="background:linear-gradient(90deg,#08216b,#a5cef7); padding:3px 6px; display:flex; align-items:center; justify-content:space-between; color:#fff; font-weight:bold; font-size:12px; height:18px;">
+                <span>Run</span>
+                <button onclick="closeMobileRunDialog()" style="background:#c0c0c0; border:1px solid #fff; border-right-color:#000; border-bottom-color:#000; width:14px; height:14px; font-size:9px; font-weight:bold; padding:0; display:flex; align-items:center; justify-content:center; color:#000; line-height:1;">X</button>
+            </div>
+            <div style="padding:10px; display:flex; gap:10px;">
+                <div style="flex-shrink:0;">
+                    <img src="./images/key_win.ico" style="width:32px; height:32px;" />
+                </div>
+                <div style="flex-grow:1; display:flex; flex-direction:column; gap:8px;">
+                    <div style="line-height:1.3; font-size:11px;">Type the name of a program, folder, or document, and Windows will open it.</div>
+                    <div style="display:flex; align-items:center; gap:6px; margin-top:4px;">
+                        <span>Open:</span>
+                        <input type="text" id="mobile-run-input" style="flex-grow:1; font-family:monospace; font-size:12px; padding:2px 4px; border:2px inset #ffffff; background:#fff; outline:none; height:20px; box-sizing:border-box;" onkeypress="handleMobileRunKey(event)" />
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:6px; padding:6px 10px 10px;">
+                <button onclick="submitMobileRun()" style="font-family:Tahoma,Arial; font-size:11px; padding:3px 14px; background:#c0c0c0; border:2px outset #fff; box-shadow:1px 1px 0px 0px #000; cursor:default;">OK</button>
+                <button onclick="closeMobileRunDialog()" style="font-family:Tahoma,Arial; font-size:11px; padding:3px 14px; background:#c0c0c0; border:2px outset #fff; box-shadow:1px 1px 0px 0px #000; cursor:default;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Win98 Mobile Shutdown Dialog Overlay -->
+    <div id="mobile-shutdown-dialog-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.4); z-index:100000; align-items:center; justify-content:center;">
+        <div id="mobile-shutdown-dialog" style="background:#c0c0c0; border:2px solid #fff; border-right-color:#000; border-bottom-color:#000; box-shadow:inset -1px -1px 0 #808080, inset 1px 1px 0 #fff; width:min(340px, 92vw); font-family:Tahoma,Geneva,sans-serif; font-size:12px; user-select:none; padding:3px; box-sizing: border-box;">
+            <div style="background:linear-gradient(90deg,#08216b,#a5cef7); padding:3px 6px; display:flex; align-items:center; justify-content:space-between; color:#fff; font-weight:bold; font-size:12px; height:18px;">
+                <span>Shut Down Windows</span>
+                <button onclick="closeMobileShutdownDialog()" style="background:#c0c0c0; border:1px solid #fff; border-right-color:#000; border-bottom-color:#000; width:14px; height:14px; font-size:9px; font-weight:bold; padding:0; display:flex; align-items:center; justify-content:center; color:#000; line-height:1;">X</button>
+            </div>
+            <div style="padding:12px; display:flex; gap:12px;">
+                <img src="images/win98_icons/shut_down_cool.ico" style="width:32px; height:32px; flex-shrink:0; padding-top:4px;" />
+                <div style="flex-grow:1;">
+                    <div style="font-weight:bold; margin-bottom:8px;">What do you want the computer to do?</div>
+                    <form style="display:flex; flex-direction:column; gap:6px;">
+                        <label style="display:flex; align-items:center; gap:8px;">
+                            <input type="radio" name="mobile-shutdown-action" value="standby" style="margin:0;" />
+                            <span>Stand by</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px;">
+                            <input type="radio" name="mobile-shutdown-action" value="shutdown" checked style="margin:0;" />
+                            <span>Shut down</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px;">
+                            <input type="radio" name="mobile-shutdown-action" value="restart" style="margin:0;" />
+                            <span>Restart</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:8px;">
+                            <input type="radio" name="mobile-shutdown-action" value="dos" style="margin:0;" />
+                            <span>Restart in MS-DOS mode</span>
+                        </label>
+                    </form>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:6px; padding:6px 12px 10px;">
+                <button onclick="confirmMobileShutdown()" style="font-family:Tahoma,Arial; font-size:12px; padding:4px 20px; background:#c0c0c0; border:2px outset #fff; box-shadow:1px 1px 0px 0px #000; cursor:default;">OK</button>
+                <button onclick="closeMobileShutdownDialog()" style="font-family:Tahoma,Arial; font-size:12px; padding:4px 20px; background:#c0c0c0; border:2px outset #fff; box-shadow:1px 1px 0px 0px #000; cursor:default;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Fullscreen Video overlays for startup & shutdown -->
+    <div id="startup-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999999; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none;">
+        <video id="startup-video" src="videos/startup.mp4" style="max-width: 100%; max-height: 100%; object-fit: contain; width: 100%; height: 100%; display: block;" playsinline></video>
+        <div id="startup-click-text" style="color: #c0c0c0; font-family: 'Courier New', Courier, monospace; font-size: 13px; text-align: left; display: none; position: absolute; top: 15px; left: 15px; right: 15px; bottom: 15px; line-height: 1.4; overflow: hidden;">
+            <p>Microsoft(R) Windows 98</p>
+            <p>(C) Copyright Microsoft Corp 1981-1998.</p>
+            <br>
+            <p>ASUS P2B Pentium II/III BX Motherboard</p>
+            <p>Award Modular BIOS v4.51PG</p>
+            <br>
+            <p>CPU: Intel Pentium II at 350 MHz</p>
+            <p>Speed: 100 MHz FSB</p>
+            <p>Total Memory: 128 MB 100 MHz SDRAM</p>
+            <p>USB Devices total: 2 Drives, 1 Keyboard, 1 Mouse, 0 Hubs</p>
+            <br>
+            <p>Detected Storages...</p>
+            <p style="padding-left: 10px;">Pri Master : Quantum Fireball EX 6.4A HDD</p>
+            <p style="padding-left: 10px;">Pri Slave  : Maxtor 84320D4 4.3GB HDD</p>
+            <p style="padding-left: 10px;">Sec Master : Creative CD5220E 52X CD-ROM</p>
+            <br>
+            <br>
+            <p>Press Any Key to Boot into Windows 98..</p>
+        </div>
+    </div>
+    
+    <div id="shutdown-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999999; display: none; align-items: center; justify-content: center;">
+        <video id="shutdown-video" src="videos/shutdown.mp4" style="max-width: 100%; max-height: 100%; object-fit: contain; width: 100%; height: 100%;"></video>
+    </div>
+
+    <script>
+        var openWindows = [];
+        var activeWindow = null;
+
+        function initMobile() {
+            startTime();
+            // Start listening for window resize to auto-scale Minesweeper
+            window.addEventListener('resize', scaleMinesweeper);
+            
+            // Periodically check/scale Minesweeper iframe to catch internal level changes
+            setInterval(scaleMinesweeper, 1000);
+
+            // Initialize explorer view
+            navigateToMobilePath("My Computer");
+        }
+
+        // --- Shared FileSystem Database ---
+        var fileSystem = {
+            "My Computer": {
+                title: "My Computer",
+                sidebarTitle: "My Computer",
+                sidebarDesc: "Use My Computer to view the contents of your computer's floppy disk, hard disk, and other system resources.",
+                icon: "images/win98_icons/computer_explorer.ico",
+                items: [
+                    { name: "3½ Floppy (A:)", type: "floppy", icon: "images/win98_icons/directory_open_cabinet.ico", action: "showMobileInfoBox('Please insert a disk in drive A:.')" },
+                    { name: "Local Disk (C:)", type: "folder", icon: "images/win98_icons/hard_disk_drive.ico", path: "C:\\" },
+                    { name: "Control Panel", type: "folder", icon: "images/win98_icons/settings_gear.ico", action: "showMobileInfoBox('Control Panel has been disabled by your system administrator.')" }
+                ]
+            },
+            "C:\\": {
+                title: "Local Disk (C:)",
+                sidebarTitle: "Local Disk (C:)",
+                sidebarDesc: "Local hard drive. Capacity: 1.99 GB. Free Space: 512 MB.",
+                icon: "images/win98_icons/hard_disk_drive.ico",
+                items: [
+                    { name: "Windows", type: "folder", icon: "images/directory_closed.ico", path: "C:\\Windows" },
+                    { name: "Program Files", type: "folder", icon: "images/directory_closed.ico", path: "C:\\Program Files" }
+                ]
+            },
+            "C:\\Windows": {
+                title: "Windows",
+                sidebarTitle: "Windows",
+                sidebarDesc: "System files and configurations.",
+                icon: "images/directory_closed.ico",
+                items: [
+                    { name: "command.com", type: "app", icon: "https://win98icons.alexmeub.com/icons/png/console_prompt-1.png", action: "openApplication('cmd', 'cmd-task')" },
+                    { name: "notepad.exe", type: "app", icon: "images/notepad.ico", action: "openApplication('notepad', 'notepad-task')" },
+                    { name: "win.ini", type: "file", icon: "images/win98_icons/notepad_file.ico", action: "openApplication('notepad', 'notepad-task')" },
+                    { name: "Wonderland.jar", type: "app", icon: "images/javalogo.png", action: "triggerWonderland()" }
+                ]
+            },
+            "C:\\Program Files": {
+                title: "Program Files",
+                sidebarTitle: "Program Files",
+                sidebarDesc: "Installed software and accessories.",
+                icon: "images/directory_closed.ico",
+                items: [
+                    { name: "Minesweeper", type: "folder", icon: "images/directory_closed.ico", path: "C:\\Program Files\\Minesweeper" }
+                ]
+            },
+            "C:\\Program Files\\Minesweeper": {
+                title: "Minesweeper",
+                sidebarTitle: "Minesweeper",
+                sidebarDesc: "Retro logic game.",
+                icon: "images/directory_closed.ico",
+                items: [
+                    { name: "minesweeper.exe", type: "app", icon: "images/minesweeper.ico", action: "openApplication('minesweeper', 'minesweeper-task')" }
+                ]
+            }
+        };
+
+        var mobileCurrentPath = "My Computer";
+
+        function renderMobileFolder(path) {
+            var dir = fileSystem[path];
+            if (!dir) return;
+
+            // Update address bar
+            var addrBar = document.getElementById('mobile-address-bar');
+            if (addrBar) addrBar.value = path;
+
+            // Update title bar
+            var explorerTitle = document.getElementById('mobile-explorer-title');
+            if (explorerTitle) explorerTitle.textContent = dir.title;
+            var explorerIcon = document.getElementById('mobile-explorer-title-icon');
+            if (explorerIcon) explorerIcon.src = dir.icon || "./images/directory_closed.ico";
+
+            // Update sidebar
+            var sidebarHeader = document.getElementById('mobile-sidebar-title');
+            if (sidebarHeader) sidebarHeader.textContent = dir.sidebarTitle || dir.title;
+            var sidebarDesc = document.getElementById('mobile-sidebar-desc');
+            if (sidebarDesc) sidebarDesc.textContent = dir.sidebarDesc || "";
+
+            // Update dynamic taskbar span if it exists
+            var taskSpan = document.querySelector('#task-explorer span');
+            if (taskSpan) taskSpan.textContent = dir.title;
+
+            // Render items in mobile-explorer-grid
+            var container = document.getElementById('mobile-explorer-grid');
+            if (!container) return;
+            container.innerHTML = "";
+
+            dir.items.forEach(function(item) {
+                var itemDiv = document.createElement('div');
+                itemDiv.className = "explorer-item";
+                
+                var img = document.createElement('img');
+                img.src = item.icon;
+                itemDiv.appendChild(img);
+
+                var span = document.createElement('span');
+                span.textContent = item.name;
+                itemDiv.appendChild(span);
+
+                // Touch clicks execute immediately
+                itemDiv.onclick = function(e) {
+                    e.stopPropagation();
+                    if (item.path) {
+                        navigateToMobilePath(item.path);
+                    } else if (item.url) {
+                        window.open(item.url);
+                    } else if (item.action) {
+                        var fn = new Function("openApp", "closeApp", "openApplication", "closeApplication", item.action);
+                        fn(openApp, closeApp, openApp, closeApp);
+                    }
+                };
+
+                container.appendChild(itemDiv);
+            });
+        }
+
+        function navigateToMobilePath(path) {
+            if (!fileSystem[path]) return;
+            mobileCurrentPath = path;
+            renderMobileFolder(path);
+        }
+
+        function handleMobileAddressBarKey(e) {
+            if (e.which === 13 || e.keyCode === 13) {
+                var targetPath = e.target.value;
+                var matchedPath = Object.keys(fileSystem).find(function(k) {
+                    return k.toLowerCase() === targetPath.toLowerCase();
+                });
+                if (matchedPath) {
+                    navigateToMobilePath(matchedPath);
+                } else {
+                    alert("Windows cannot find '" + targetPath + "'. Check the spelling and try again.");
+                    e.target.value = mobileCurrentPath;
+                }
+            }
+        }
+
+        function startTime() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var p = h >= 12 ? " PM" : " AM";
+            h = h % 12;
+            h = h ? h : 12; // hour '0' should be '12'
+            m = m < 10 ? "0" + m : m;
+            document.getElementById('clock').innerHTML = h + ":" + m + p;
+            setTimeout(startTime, 30000);
+        }
+
+        function toggleStartMenu(e) {
+            e.stopPropagation();
+            var menu = document.getElementById('start-menu');
+            var btn = document.getElementById('start-button');
+            if (menu.style.display === 'block') {
+                menu.style.display = 'none';
+                btn.classList.remove('active');
+            } else {
+                menu.style.display = 'block';
+                btn.classList.add('active');
+            }
+        }
+
+        function closeStartMenu() {
+            document.getElementById('start-menu').style.display = 'none';
+            document.getElementById('start-button').classList.remove('active');
+        }
+
+        function openApp(appId) {
+            var win = document.getElementById('win-' + appId);
+            if (!win) return;
+
+            win.style.display = 'flex';
+            
+            if (!openWindows.includes(appId)) {
+                openWindows.push(appId);
+                createTaskItem(appId);
+            }
+
+            bringToFront(appId);
+
+            if (appId === 'minesweeper') {
+                setTimeout(scaleMinesweeper, 100);
+            }
+        }
+
+        function closeApp(appId) {
+            var win = document.getElementById('win-' + appId);
+            if (win) {
+                win.style.display = 'none';
+            }
+            
+            var index = openWindows.indexOf(appId);
+            if (index > -1) {
+                openWindows.splice(index, 1);
+            }
+            
+            removeTaskItem(appId);
+
+            if (activeWindow === appId) {
+                activeWindow = null;
+                if (openWindows.length > 0) {
+                    bringToFront(openWindows[openWindows.length - 1]);
+                }
+            }
+        }
+
+        function bringToFront(appId) {
+            openWindows.forEach(function(id) {
+                var w = document.getElementById('win-' + id);
+                if (w) w.classList.remove('active-window');
+                
+                var t = document.getElementById('task-' + id);
+                if (t) t.classList.remove('active');
+            });
+
+            var win = document.getElementById('win-' + appId);
+            if (win) {
+                win.classList.add('active-window');
+                // Ensure active window has highest stack order among windows
+                openWindows.push(openWindows.splice(openWindows.indexOf(appId), 1)[0]);
+                openWindows.forEach(function(id, index) {
+                    var w = document.getElementById('win-' + id);
+                    if (w) w.style.zIndex = 1000 + index;
+                });
+            }
+
+            var task = document.getElementById('task-' + appId);
+            if (task) {
+                task.classList.add('active');
+            }
+
+            activeWindow = appId;
+        }
+
+        function createTaskItem(appId) {
+            var container = document.getElementById('task-container');
+            if (document.getElementById('task-' + appId)) return;
+
+            var title = "";
+            var iconSrc = "";
+            
+            if (appId === 'mycomputer') { title = "My Computer"; iconSrc = "./images/computer_explorer.ico"; }
+            else if (appId === 'notepad') { title = "About Me"; iconSrc = "./images/notepad.ico"; }
+            else if (appId === 'mail') { title = "Contact Me"; iconSrc = "./images/mail.ico"; }
+            else if (appId === 'minesweeper') { title = "Minesweeper"; iconSrc = "./images/minesweeper.ico"; }
+            else if (appId === 'explorer') { title = "File Explorer"; iconSrc = "./images/directory_closed.ico"; }
+            else if (appId === 'cmd') { title = "MS-DOS Prompt"; iconSrc = "https://win98icons.alexmeub.com/icons/png/console_prompt-1.png"; }
+
+            var task = document.createElement('div');
+            task.id = 'task-' + appId;
+            task.className = 'task-item';
+            task.innerHTML = '<img src="' + iconSrc + '" /><span>' + title + '</span>';
+            task.onclick = function() {
+                var win = document.getElementById('win-' + appId);
+                if (win.style.display === 'none') {
+                    openApp(appId);
+                } else if (activeWindow === appId) {
+                    win.style.display = 'none';
+                    task.classList.remove('active');
+                    activeWindow = null;
+                } else {
+                    bringToFront(appId);
+                }
+            };
+
+            container.appendChild(task);
+        }
+
+        function removeTaskItem(appId) {
+            var task = document.getElementById('task-' + appId);
+            if (task) {
+                task.remove();
+            }
+        }
+
+        function scaleMinesweeper() {
+            var iframe = document.getElementById('mine-frame');
+            if (!iframe) return;
+            var container = document.getElementById('minesweeper-frame-container');
+            if (!container) return;
+
+            var containerWidth = container.clientWidth;
+            var containerHeight = container.clientHeight;
+
+            try {
+                var doc = iframe.contentDocument || iframe.contentWindow.document;
+                var board = doc.getElementById('window-wrapper-outer');
+                if (board) {
+                    var boardWidth = board.offsetWidth;
+                    var boardHeight = board.offsetHeight;
+
+                    if (boardWidth > 0 && boardHeight > 0) {
+                        var scaleX = containerWidth / (boardWidth + 10);
+                        var scaleY = containerHeight / (boardHeight + 10);
+                        var scale = Math.min(scaleX, scaleY, 1.5); // Max scale 1.5x, min as needed
+
+                        board.style.transform = "scale(" + scale + ")";
+                        board.style.transformOrigin = "top center";
+                        
+                        iframe.style.width = "100%";
+                        iframe.style.height = (boardHeight * scale + 20) + "px";
+                    }
+                }
+            } catch (e) {
+                // Ignore cross-origin warnings if they occur
+            }
+        }
+
+        // --- Win98 Mobile Info Box ---
+        function showMobileInfoBox(message) {
+            document.getElementById('mobile-infobox-msg').textContent = message;
+            var box = document.getElementById('mobile-win98-infobox');
+            var dialog = document.getElementById('mobile-win98-infobox-dialog');
+            box.style.display = 'block';
+            // Reset to center each time
+            dialog.style.left = '50%';
+            dialog.style.top  = '40%';
+            dialog.style.transform = 'translate(-50%, -50%)';
+            var snd = document.getElementById('mobile-info-sound');
+            if (snd) { snd.currentTime = 0; snd.play(); }
+        }
+        function closeMobileInfoBox() {
+            document.getElementById('mobile-win98-infobox').style.display = 'none';
+        }
+        function mobileInfoboxDragStart(e) {
+            // Support both mouse and touch
+            var isTouch = e.touches !== undefined;
+            var startClientX = isTouch ? e.touches[0].clientX : e.clientX;
+            var startClientY = isTouch ? e.touches[0].clientY : e.clientY;
+            var dialog = document.getElementById('mobile-win98-infobox-dialog');
+            var rect = dialog.getBoundingClientRect();
+            dialog.style.transform = 'none';
+            dialog.style.left = rect.left + 'px';
+            dialog.style.top  = rect.top  + 'px';
+            var startX = startClientX - rect.left;
+            var startY = startClientY - rect.top;
+            function onMove(e) {
+                var cx = e.touches ? e.touches[0].clientX : e.clientX;
+                var cy = e.touches ? e.touches[0].clientY : e.clientY;
+                dialog.style.left = (cx - startX) + 'px';
+                dialog.style.top  = (cy - startY) + 'px';
+            }
+            function onEnd() {
+                document.removeEventListener('mousemove',  onMove);
+                document.removeEventListener('mouseup',    onEnd);
+                document.removeEventListener('touchmove',  onMove);
+                document.removeEventListener('touchend',   onEnd);
+            }
+            document.addEventListener('mousemove',  onMove);
+            document.addEventListener('mouseup',    onEnd);
+            document.addEventListener('touchmove',  onMove, { passive: true });
+            document.addEventListener('touchend',   onEnd);
+        }
+
+        // --- MS-DOS Terminal ---
+        var mobileCmdCurrentDir = "C:\\WINDOWS";
+        var mobileCmdHistoryList = [];
+        var mobileCmdHistoryIndex = -1;
+
+        function focusMobileTerminal() {
+            var el = document.getElementById('mobile-cmd-input');
+            if (el) el.focus();
+        }
+
+        function handleMobileTerminalInput(e) {
+            if (e.key === "Enter") {
+                var inputEl = document.getElementById('mobile-cmd-input');
+                var commandLine = inputEl.value.trim();
+                var historyEl = document.getElementById('mobile-cmd-history');
+                historyEl.innerHTML += mobileCmdCurrentDir + "&gt;" + inputEl.value + "<br>";
+                if (commandLine.length > 0) {
+                    mobileCmdHistoryList.push(commandLine);
+                    mobileCmdHistoryIndex = mobileCmdHistoryList.length;
+                    var parts = commandLine.split(" ");
+                    var cmd = parts[0].toLowerCase();
+                    var arg = parts.slice(1).join(" ").trim();
+                    executeMobileTerminalCommand(cmd, arg);
+                }
+                inputEl.value = "";
+                var term = document.getElementById('mobile-cmd-terminal');
+                if (term) term.scrollTop = term.scrollHeight;
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                if (mobileCmdHistoryIndex > 0) {
+                    mobileCmdHistoryIndex--;
+                    document.getElementById('mobile-cmd-input').value = mobileCmdHistoryList[mobileCmdHistoryIndex];
+                }
+            } else if (e.key === "ArrowDown") {
+                e.preventDefault();
+                if (mobileCmdHistoryIndex < mobileCmdHistoryList.length - 1) {
+                    mobileCmdHistoryIndex++;
+                    document.getElementById('mobile-cmd-input').value = mobileCmdHistoryList[mobileCmdHistoryIndex];
+                } else {
+                    mobileCmdHistoryIndex = mobileCmdHistoryList.length;
+                    document.getElementById('mobile-cmd-input').value = "";
+                }
+            }
+        }
+
+        function executeMobileTerminalCommand(cmd, arg) {
+            var historyEl = document.getElementById('mobile-cmd-history');
+            switch(cmd) {
+                case "cls":
+                    historyEl.innerHTML = "";
+                    break;
+                case "ver":
+                    historyEl.innerHTML += "Microsoft Windows 98 [Version 4.10.1998]<br><br>";
+                    break;
+                case "exit":
+                    closeApp('cmd');
+                    break;
+                case "help":
+                    historyEl.innerHTML += "Supported commands:<br>";
+                    historyEl.innerHTML += "  HELP    - Display list of commands.<br>";
+                    historyEl.innerHTML += "  CLS     - Clear the terminal screen.<br>";
+                    historyEl.innerHTML += "  DIR     - List files in current directory.<br>";
+                    historyEl.innerHTML += "  CD      - Change directory.<br>";
+                    historyEl.innerHTML += "  TYPE    - View text file contents.<br>";
+                    historyEl.innerHTML += "  VER     - Display version information.<br>";
+                    historyEl.innerHTML += "  START   - Run application (e.g. start notepad).<br>";
+                    historyEl.innerHTML += "  EXIT    - Close the MS-DOS prompt.<br><br>";
+                    break;
+                case "dir":
+                    var dir = fileSystem[mobileCmdCurrentDir];
+                    if (!dir) { historyEl.innerHTML += "Directory not found.<br><br>"; break; }
+                    historyEl.innerHTML += " Volume in drive C has no label<br>";
+                    historyEl.innerHTML += " Directory of " + mobileCmdCurrentDir + "<br><br>";
+                    historyEl.innerHTML += "   .              &lt;DIR&gt;        05-23-98  12:00p .<br>";
+                    historyEl.innerHTML += "   ..             &lt;DIR&gt;        05-23-98  12:00p ..<br>";
+                    var fc = 0, dc = 2;
+                    if (dir.items) {
+                        dir.items.forEach(function(item) {
+                            var n = item.name.padEnd(15, ' ');
+                            if (item.type === 'folder') {
+                                historyEl.innerHTML += "   " + n + " &lt;DIR&gt;        05-23-98  12:00p " + item.name + "<br>"; dc++;
+                            } else {
+                                historyEl.innerHTML += "   " + n + "              1,024 05-23-98  12:00p " + item.name + "<br>"; fc++;
+                            }
+                        });
+                    }
+                    historyEl.innerHTML += "         " + fc + " File(s)          1,024 bytes<br>";
+                    historyEl.innerHTML += "         " + dc + " Dir(s)        536,870,912 bytes free<br><br>";
+                    break;
+                case "cd":
+                    if (!arg || arg === ".") { historyEl.innerHTML += mobileCmdCurrentDir + "<br><br>"; break; }
+                    if (arg === "..") {
+                        if (mobileCmdCurrentDir !== "C:\\" && mobileCmdCurrentDir.lastIndexOf("\\") > 2) {
+                            mobileCmdCurrentDir = mobileCmdCurrentDir.substring(0, mobileCmdCurrentDir.lastIndexOf("\\"));
+                        } else if (mobileCmdCurrentDir !== "C:\\") {
+                            mobileCmdCurrentDir = "C:\\";
+                        }
+                    } else {
+                        var checkPath = mobileCmdCurrentDir === "C:\\" ? "C:\\" + arg : mobileCmdCurrentDir + "\\" + arg;
+                        if (fileSystem[checkPath]) {
+                            mobileCmdCurrentDir = checkPath;
+                        } else {
+                            historyEl.innerHTML += "Invalid directory - " + arg + "<br><br>";
+                        }
+                    }
+                    document.getElementById('mobile-cmd-prompt-path').innerHTML = mobileCmdCurrentDir + "&gt;";
+                    break;
+                case "type":
+                    if (!arg) { historyEl.innerHTML += "Required parameter missing.<br><br>"; break; }
+                    if (arg.toLowerCase() === "win.ini") {
+                        historyEl.innerHTML += "; for 16-bit app support<br>[386Enh]<br>woafont=dosapp.fon<br>EGA80WOA.FON=EGA80WOA.FON<br><br>";
+                    } else {
+                        historyEl.innerHTML += "File not found - " + arg + "<br><br>";
+                    }
+                    break;
+                case "start":
+                    if (!arg) { historyEl.innerHTML += "Syntax: START [program_name]<br><br>"; break; }
+                    var prog = arg.toLowerCase();
+                    if (prog === "notepad" || prog === "notepad.exe") {
+                        openApp('notepad'); historyEl.innerHTML += "Starting Notepad...<br><br>";
+                    } else if (prog === "minesweeper" || prog === "minesweeper.exe") {
+                        openApp('minesweeper'); historyEl.innerHTML += "Starting Minesweeper...<br><br>";
+                    } else if (prog === "explorer" || prog === "explorer.exe") {
+                        openApp('explorer'); historyEl.innerHTML += "Starting File Explorer...<br><br>";
+                    } else if (prog === "wonderland" || prog === "wonderland.jar") {
+                        triggerWonderland(); historyEl.innerHTML += "Starting Wonderland...<br><br>";
+                    } else {
+                        historyEl.innerHTML += "Unknown application - " + arg + "<br><br>";
+                    }
+                    break;
+                default:
+                    historyEl.innerHTML += "Bad command or file name<br><br>";
+            }
+        }
+
+        // --- Mobile Run Dialog ---
+        function openMobileRunDialog() {
+            var overlay = document.getElementById('mobile-run-dialog-overlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+                var inp = document.getElementById('mobile-run-input');
+                if (inp) { inp.value = ''; inp.focus(); }
+            }
+        }
+        function closeMobileRunDialog() {
+            var overlay = document.getElementById('mobile-run-dialog-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+        function handleMobileRunKey(e) {
+            if (e.which === 13 || e.keyCode === 13) submitMobileRun();
+        }
+        function submitMobileRun() {
+            var val = document.getElementById('mobile-run-input').value.trim();
+            if (!val) return;
+            var low = val.toLowerCase();
+            var processed = false;
+            if (fileSystem[val]) {
+                openApp('explorer'); navigateToMobilePath(val); processed = true;
+            } else if (low === "c:\\" || low === "c:") {
+                openApp('explorer'); navigateToMobilePath("C:\\"); processed = true;
+            } else if (low === "c:\\windows") {
+                openApp('explorer'); navigateToMobilePath("C:\\Windows"); processed = true;
+            } else if (low === "c:\\program files") {
+                openApp('explorer'); navigateToMobilePath("C:\\Program Files"); processed = true;
+            } else if (low === "my computer") {
+                openApp('explorer'); navigateToMobilePath("My Computer"); processed = true;
+            } else if (low === "notepad" || low === "notepad.exe") {
+                openApp('notepad'); processed = true;
+            } else if (low === "minesweeper" || low === "minesweeper.exe") {
+                openApp('minesweeper'); processed = true;
+            } else if (low === "cmd" || low === "command" || low === "command.com") {
+                openApp('cmd'); processed = true;
+            } else if (low === "wonderland" || low === "wonderland.jar") {
+                triggerWonderland(); processed = true;
+            }
+            if (processed) {
+                closeMobileRunDialog();
+            } else {
+                showInfoBox("Windows cannot find '" + val + "'. Make sure you typed the name correctly, and then try again.");
+            }
+        }
+
+        // --- Mobile Shutdown Dialog ---
+        function openMobileShutdownDialog() {
+            var overlay = document.getElementById('mobile-shutdown-dialog-overlay');
+            if (overlay) overlay.style.display = 'flex';
+        }
+        function closeMobileShutdownDialog() {
+            var overlay = document.getElementById('mobile-shutdown-dialog-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+        function confirmMobileShutdown() {
+            closeMobileShutdownDialog();
+            var shutdownOverlay = document.getElementById('shutdown-overlay');
+            var video = document.getElementById('shutdown-video');
+            if (shutdownOverlay && video) {
+                shutdownOverlay.style.display = 'flex';
+                var p = video.play();
+                if (p !== undefined) {
+                    p.catch(function() {
+                        shutdownOverlay.addEventListener('click', function() { video.play(); }, { once: true });
+                    });
+                }
+                video.addEventListener('ended', function() { location.reload(); }, { once: true });
+            } else {
+                location.reload();
+            }
+        }
+
+        // Wonderland.jar Execution function
+        function triggerWonderland() {
+            // 1. Play error sound
+            var errorAudio = new Audio('assets/audio/error.mp3');
+            errorAudio.play().catch(function(e){ console.log("Audio play failed:", e); });
+
+            // Create a container to hold everything
+            var container = document.createElement('div');
+            container.id = 'wonderland-container';
+            container.style.position = 'fixed';
+            container.style.top = '0';
+            container.style.left = '0';
+            container.style.width = '100vw';
+            container.style.height = '100vh';
+            container.style.zIndex = '99999999';
+            container.style.pointerEvents = 'auto';
+            container.style.overflow = 'hidden';
+            document.body.appendChild(container);
+
+            // Create the initial error box: "you shouldnt have opened me.."
+            var mainBox = document.createElement('div');
+            mainBox.style.position = 'absolute';
+            mainBox.style.left = '50%';
+            mainBox.style.top = '40%';
+            mainBox.style.transform = 'translate(-50%, -50%)';
+            mainBox.style.width = '280px'; // slightly narrower on mobile
+            mainBox.style.background = '#c0c0c0';
+            mainBox.style.border = '2px solid #fff';
+            mainBox.style.borderRightColor = '#000';
+            mainBox.style.borderBottomColor = '#000';
+            mainBox.style.boxShadow = 'inset -1px -1px 0 #808080, inset 1px 1px 0 #fff';
+            mainBox.style.fontFamily = 'Tahoma, Geneva, sans-serif';
+            mainBox.style.fontSize = '12px';
+            mainBox.style.userSelect = 'none';
+            mainBox.style.zIndex = '100000000';
+
+            function startFlood() {
+                mainBox.remove();
+                
+                var count = 0;
+                var maxBoxes = 1000;
+                var intervalTime = 5;
+
+                var spawnInterval = setInterval(function() {
+                    if (count >= maxBoxes) {
+                        clearInterval(spawnInterval);
+                        return;
+                    }
+
+                    if (count % 15 === 0) {
+                        var snd = new Audio('assets/audio/error.mp3');
+                        snd.volume = 0.4;
+                        snd.play().catch(function(){});
+                    }
+
+                    var box = document.createElement('div');
+                    box.style.position = 'absolute';
+                    var randomLeft = Math.floor(Math.random() * (window.innerWidth - 150)) - 25;
+                    var randomTop = Math.floor(Math.random() * (window.innerHeight - 60)) - 15;
+                    box.style.left = randomLeft + 'px';
+                    box.style.top = randomTop + 'px';
+                    box.style.width = '200px';
+                    box.style.background = '#c0c0c0';
+                    box.style.border = '2px solid #fff';
+                    box.style.borderRightColor = '#000';
+                    box.style.borderBottomColor = '#000';
+                    box.style.boxShadow = 'inset -1px -1px 0 #808080, inset 1px 1px 0 #fff';
+                    box.style.fontFamily = 'Tahoma, Geneva, sans-serif';
+                    box.style.fontSize = '11px';
+                    box.style.userSelect = 'none';
+                    box.style.zIndex = (100000100 + count).toString();
+
+                    box.innerHTML = `
+                        <div style="background: linear-gradient(90deg, #08216b, #a5cef7); padding: 2px 4px; display: flex; align-items: center; justify-content: flex-end; color: #fff; height: 14px;">
+                            <button style="background: #c0c0c0; border: 1px solid #fff; border-right-color: #000; border-bottom-color: #000; width: 12px; height: 12px; font-size: 8px; font-weight: bold; padding: 0; display: flex; align-items: center; justify-content: center; color: #000; line-height: 1;">X</button>
+                        </div>
+                        <div style="padding: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <img src="images/win98_icons/error.ico" style="width: 20px; height: 20px; flex-shrink: 0;" />
+                            <button style="background: #c0c0c0; border: 2px solid #fff; border-right-color: #000; border-bottom-color: #000; box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf; min-width: 40px; padding: 2px 6px; font-family: Tahoma, Geneva, sans-serif; font-size: 10px; color: #000;">OK</button>
+                        </div>
+                    `;
+                    container.appendChild(box);
+                    count++;
+                }, intervalTime);
+
+                // After 10 seconds total, show BSOD screen & loop bsod.mp3
+                setTimeout(function() {
+                    clearInterval(spawnInterval);
+                    container.innerHTML = '';
+                    var bsod = document.createElement('div');
+                    bsod.style.position = 'fixed';
+                    bsod.style.top = '0';
+                    bsod.style.left = '0';
+                    bsod.style.width = '100vw';
+                    bsod.style.height = '100vh';
+                    bsod.style.background = '#0000aa';
+                    bsod.style.zIndex = '999999999';
+                    bsod.style.display = 'flex';
+                    bsod.style.alignItems = 'center';
+                    bsod.style.justifyContent = 'center';
+
+                    var img = document.createElement('img');
+                    img.src = 'images/bsod.png';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '100%';
+                    img.style.objectFit = 'contain';
+                    bsod.appendChild(img);
+                    document.body.appendChild(bsod);
+
+                    var bsodAudio = new Audio('assets/audio/bsod.mp3');
+                    bsodAudio.loop = true;
+                    bsodAudio.play().catch(function(e){ console.log("BSOD Audio play failed:", e); });
+
+                    setTimeout(function() {
+                        bsodAudio.pause();
+                        location.reload();
+                    }, 10000);
+
+                }, 10000);
+            }
+
+            mainBox.innerHTML = `
+                <div style="background: linear-gradient(90deg, #08216b, #a5cef7); padding: 3px 6px; display: flex; align-items: center; justify-content: space-between; color: #fff; font-weight: bold; font-size: 12px; height: 18px;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <img src="images/win98_icons/error.ico" style="width: 16px; height: 16px;" />
+                        <span>Wonderland</span>
+                    </div>
+                    <button id="wonderland-close-btn" style="background: #c0c0c0; border: 1px solid #fff; border-right-color: #000; border-bottom-color: #000; width: 14px; height: 14px; font-size: 9px; font-weight: bold; padding: 0; display: flex; align-items: center; justify-content: center; color: #000; line-height: 1; cursor: pointer;">X</button>
+                </div>
+                <div style="padding: 16px 14px 10px 14px; display: flex; align-items: flex-start; gap: 12px;">
+                    <img src="images/win98_icons/error.ico" style="width: 32px; height: 32px; flex-shrink: 0;" />
+                    <span style="line-height: 1.5; margin-top: 4px; color: #000;">you shouldnt have opened me..</span>
+                </div>
+                <div style="text-align: center; padding: 6px 14px 14px 14px;">
+                    <button id="wonderland-ok-btn" style="background: #c0c0c0; border: 2px solid #fff; border-right-color: #000; border-bottom-color: #000; box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf; min-width: 70px; padding: 4px 12px; font-family: Tahoma, Geneva, sans-serif; font-size: 12px; cursor: pointer; color: #000;">OK</button>
+                </div>
+            `;
+            container.appendChild(mainBox);
+
+            document.getElementById('wonderland-ok-btn').onclick = startFlood;
+            document.getElementById('wonderland-close-btn').onclick = startFlood;
+        }
+
+        // --- Startup Video Boot Sequence ---
+        window.addEventListener('load', function() {
+            var startupOverlay = document.getElementById('startup-overlay');
+            var startupVideo = document.getElementById('startup-video');
+            var clickText = document.getElementById('startup-click-text');
+            if (startupVideo && startupOverlay) {
+                startupVideo.muted = false;
+                var hasPlayed = false;
+                startupVideo.addEventListener('play', function() {
+                    hasPlayed = true;
+                    startupVideo.style.display = 'block';
+                    if (clickText) clickText.style.display = 'none';
+                });
+                var playPromise = startupVideo.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(function() {
+                        startupVideo.style.display = 'none';
+                        if (clickText) clickText.style.display = 'block';
+                        function startOnInteraction(e) {
+                            if (e) e.preventDefault();
+                            startupVideo.muted = false;
+                            startupVideo.play().catch(function() {
+                                if (startupOverlay) startupOverlay.style.display = 'none';
+                            });
+                            startupOverlay.removeEventListener('click', startOnInteraction);
+                            document.removeEventListener('keydown', startOnInteraction);
+                        }
+                        startupOverlay.addEventListener('click', startOnInteraction);
+                        document.addEventListener('keydown', startOnInteraction);
+                    });
+                }
+                startupVideo.addEventListener('ended', function() {
+                    if (startupOverlay) startupOverlay.style.display = 'none';
+                });
+            } else {
+                if (startupOverlay) startupOverlay.style.display = 'none';
+            }
+        });
+
+        // --- Clipboard utilities ---
+        function showInfoBox(msg) {
+            if (typeof showMobileInfoBox === 'function') showMobileInfoBox(msg);
+        }
+        function copyDiscord(element) {
+            navigator.clipboard.writeText("fogmail.cc").then(function() {
+                showInfoBox("Copied to Clipboard.");
+            }).catch(function() {
+                var dummy = document.createElement("textarea");
+                document.body.appendChild(dummy);
+                dummy.value = "fogmail.cc";
+                dummy.select();
+                document.execCommand("copy");
+                document.body.removeChild(dummy);
+                showInfoBox("Copied to Clipboard.");
+            });
+        }
+    </script>
+
+    <!-- Win98 Info Dialog -->
+    <div id="mobile-win98-infobox" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; z-index:99999; pointer-events:none;">
+        <div id="mobile-win98-infobox-dialog" style="position:absolute; left:50%; top:40%; transform:translate(-50%,-50%); pointer-events:all; background:#c0c0c0; border:2px solid #fff; border-right-color:#000; border-bottom-color:#000; box-shadow:inset -1px -1px 0 #808080, inset 1px 1px 0 #fff; width:min(320px, 88vw); font-family:Tahoma,Geneva,sans-serif; font-size:12px; user-select:none;">
+            <div onmousedown="mobileInfoboxDragStart(event)" ontouchstart="mobileInfoboxDragStart(event)" style="background:linear-gradient(90deg,#08216b,#a5cef7); padding:3px 6px; display:flex; align-items:center; justify-content:space-between; cursor:default; touch-action:none;">
+                <div style="display:flex; align-items:center; gap:6px; color:#fff; font-weight:bold; font-size:12px;">
+                    <img src="images/win98_icons/information.ico" style="width:16px; height:16px;" />
+                    Windows
+                </div>
+                <button onclick="closeMobileInfoBox()" onmousedown="event.stopPropagation()" ontouchstart="event.stopPropagation()" style="background:#c0c0c0; border:1px solid #fff; border-right-color:#000; border-bottom-color:#000; width:18px; height:18px; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold; line-height:1;">&#x2715;</button>
+            </div>
+            <div style="padding:16px 14px 10px 14px; display:flex; align-items:flex-start; gap:12px;">
+                <img src="images/win98_icons/information.ico" style="width:32px; height:32px; flex-shrink:0;" />
+                <span id="mobile-infobox-msg" style="line-height:1.5; margin-top:4px;"></span>
+            </div>
+            <div style="text-align:center; padding:6px 14px 14px 14px;">
+                <button onclick="closeMobileInfoBox()" style="background:#c0c0c0; border:2px solid #fff; border-right-color:#000; border-bottom-color:#000; box-shadow:inset -1px -1px 0 #808080, inset 1px 1px 0 #dfdfdf; min-width:70px; padding:4px 12px; font-family:Tahoma,Geneva,sans-serif; font-size:12px; cursor:pointer;">OK</button>
+            </div>
+        </div>
+    </div>
+    <audio id="mobile-info-sound" src="assets/audio/info.mp3" preload="auto"></audio>
+</body>
+</html>
