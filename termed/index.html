@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Am I terminated?</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0a0a0a;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      padding: 1.5rem;
+      margin: 0;
+    }
+
+    .card {
+      background: #1a1a1a;
+      max-width: 560px;
+      width: 100%;
+      padding: 2.5rem 2.5rem 2.5rem;
+      border: 1px solid #333333;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .question {
+      font-size: 1.3rem;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+      color: #bbbbbb;
+      padding-bottom: 1.2rem;
+      border-bottom: 1px solid #2a2a2a;
+      margin-bottom: 2rem;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .status-block {
+      background: #111111;
+      padding: 2rem 1.8rem;
+      border: 1px solid #2a2a2a;
+      min-height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-text {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      font-weight: 400;
+      color: #cccccc;
+      text-align: center;
+      width: 100%;
+      letter-spacing: -0.1px;
+    }
+
+    .status-text .highlight {
+      font-weight: 500;
+    }
+
+    .status-text .green {
+      color: #ffffff;
+      background: #222222;
+      padding: 0 4px;
+    }
+
+    .status-text .red {
+      color: #ffffff;
+      background: #2a2a2a;
+      padding: 0 4px;
+    }
+
+    .status-text .sub {
+      display: block;
+      margin-top: 0.9rem;
+      font-size: 0.9rem;
+      color: #888888;
+      font-weight: 350;
+      letter-spacing: 0.1px;
+    }
+
+    .status-text .new-discord {
+      display: inline-block;
+      background: #222222;
+      padding: 0.2rem 1.2rem;
+      font-weight: 400;
+      font-size: 0.95rem;
+      color: #eeeeee;
+      border: 1px solid #3a3a3a;
+      margin-top: 0.3rem;
+      letter-spacing: 0.2px;
+    }
+
+    @media (max-width: 480px) {
+      .card { padding: 1.8rem 1.2rem; }
+      .status-block { padding: 1.5rem 1rem; }
+      .status-text { font-size: 1rem; }
+      .question { font-size: 1.1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="card" id="statusCard">
+  <div class="question">
+    am i terminated?
+  </div>
+
+  <div class="status-block" id="statusBlock">
+    <div class="status-text" id="statusText">
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const IS_TERMINATED = false;
+    const NEW_DISCORD_USERNAME = "hi inspect element user";
+
+    const statusText = document.getElementById('statusText');
+
+    function renderStatus(isTerminated) {
+      if (isTerminated) {
+        statusText.innerHTML = `
+          <span class="highlight red">Yes</span> sadly i have been <span class="highlight red">Terminated<br>
+          <span class="sub">My New Discord is:</span>
+          <span class="new-discord">${NEW_DISCORD_USERNAME}</span>
+        `;
+      } else {
+        statusText.innerHTML = `
+          <span class="highlight green">I am not Terminated</span>
+          <span class="sub">(or i have forgot to update this)</span>
+        `;
+      }
+    }
+
+    renderStatus(IS_TERMINATED);
+  })();
+</script>
+
+</body>
+</html>
